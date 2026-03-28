@@ -182,15 +182,16 @@
         /* ── Apps ──────────────────────────────────────────────────────── */
         .apps { padding: 80px 0; }
         .app-card {
-            display: grid; grid-template-columns: 1fr auto; gap: 48px;
+            display: grid; grid-template-columns: 1fr 280px; gap: 48px;
             align-items: center; margin-bottom: 80px;
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 24px; padding: 48px;
             transition: background 0.3s, border-color 0.3s;
         }
         .app-card:last-child { margin-bottom: 0; }
-        .app-card.reverse { direction: rtl; }
-        .app-card.reverse > * { direction: ltr; }
+        .app-card.reverse { grid-template-columns: 280px 1fr; }
+        .app-card.reverse .app-info { order: 2; }
+        .app-card.reverse .app-screenshot { order: 1; }
         .app-badge {
             display: inline-flex; align-items: center; gap: 8px;
             background: var(--primary-light); color: var(--primary);
@@ -238,7 +239,9 @@
             .app-card {
                 grid-template-columns: 1fr; padding: 32px 24px; gap: 32px;
             }
-            .app-card.reverse { direction: ltr; }
+            .app-card.reverse { grid-template-columns: 1fr; }
+            .app-card.reverse .app-info { order: 0; }
+            .app-card.reverse .app-screenshot { order: -1; }
             .app-screenshot { order: -1; }
             .phone-frame { width: 200px; }
         }
@@ -372,13 +375,13 @@
     <div class="nav-inner">
         <a href="#" class="nav-brand">
             <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                <defs><linearGradient id="navGrad" x1="5" y1="43" x2="39" y2="5"><stop offset="0%" stop-color="#115891"/><stop offset="50%" stop-color="#1B7CC4"/><stop offset="100%" stop-color="#89C4ED"/></linearGradient></defs>
+                <defs><linearGradient id="navGrad" x1="5" y1="24" x2="39" y2="24"><stop offset="0%" stop-color="#1B7CC4"/><stop offset="100%" stop-color="#89C4ED"/></linearGradient></defs>
                 <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="url(#navGrad)" stroke-width="5" stroke-linecap="round"/>
             </svg>
             <span>ClairTools</span>
         </a>
         <div class="nav-links">
-            <a href="#trust" class="nav-text-link" style="color:var(--secondary)">
+            <a href="#trust" class="nav-text-link">
                 <span class="en">Trust</span>
                 <span class="fr">Confiance</span>
                 <span class="es">Confianza</span>
@@ -423,7 +426,7 @@
     <div class="container">
         <div class="hero-logo">
             <svg width="80" height="80" viewBox="0 0 48 48" fill="none">
-                <defs><linearGradient id="heroGrad" x1="5" y1="43" x2="39" y2="5"><stop offset="0%" stop-color="#115891"/><stop offset="50%" stop-color="#1B7CC4"/><stop offset="100%" stop-color="#89C4ED"/></linearGradient></defs>
+                <defs><linearGradient id="heroGrad" x1="5" y1="24" x2="39" y2="24"><stop offset="0%" stop-color="#1B7CC4"/><stop offset="100%" stop-color="#89C4ED"/></linearGradient></defs>
                 <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="url(#heroGrad)" stroke-width="5" stroke-linecap="round"/>
             </svg>
         </div>
@@ -524,8 +527,8 @@
 
             <!-- Ad-Free -->
             <div class="trust-card">
-                <div class="trust-icon" style="background:var(--primary-light);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round">
+                <div class="trust-icon" style="background:var(--secondary-light);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round">
                         <circle cx="12" cy="12" r="10"/>
                         <line x1="4" y1="4" x2="20" y2="20"/>
                     </svg>
@@ -567,8 +570,8 @@
 
             <!-- Device Only -->
             <div class="trust-card">
-                <div class="trust-icon" style="background:var(--primary-light);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="trust-icon" style="background:var(--secondary-light);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
                         <line x1="12" y1="18" x2="12" y2="18"/>
                     </svg>
