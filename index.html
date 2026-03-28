@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClairTools — Simple tools, honestly made.</title>
+    <meta name="description" content="ClairTools builds ad-free, privacy-first utility apps for Android. Simple tools, honestly made.">
+    <meta property="og:title" content="ClairTools — Simple tools, honestly made.">
+    <meta property="og:description" content="Ad-free Android tools built with trust. Your data stays yours.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://clair.tools">
+    <meta name="theme-color" content="#1B7CC4">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15' stroke='%231B7CC4' stroke-width='5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+    <link rel="canonical" href="https://clair.tools">
+    <style>
+        /* ── Reset ─────────────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --blue-50:#E8F4FD; --blue-100:#BFE0F7; --blue-200:#89C4ED; --blue-400:#4A9FDB;
+            --blue-600:#1B7CC4; --blue-800:#115891; --blue-900:#0A3A61;
+            --green-50:#E6F2ED; --green-100:#B8DFCE; --green-200:#7EC8A9; --green-400:#3DAA7E;
+            --green-600:#1A7A5A; --green-800:#0F5A41; --green-900:#073B2A;
+            --gray-50:#F6F5F2; --gray-100:#E8E6E1; --gray-200:#D1CFCA; --gray-400:#9F9E98;
+            --gray-600:#6E6D68; --gray-800:#47463F; --gray-900:#2A2925;
+            --warm-charcoal:#1A1918; --warm-stone:#242320; --warm-elevated:#2E2D2A; --warm-light-text:#EDECE8;
+
+            --bg:var(--gray-50); --surface:#FFFFFF; --text-primary:var(--gray-900);
+            --text-secondary:var(--gray-600); --text-muted:var(--gray-400); --border:var(--gray-200);
+            --primary:var(--blue-600); --primary-light:var(--blue-50);
+            --secondary:var(--green-600); --secondary-light:var(--green-50);
+        }
+
+        [data-theme="dark"] {
+            --bg:var(--warm-charcoal); --surface:var(--warm-stone); --text-primary:var(--warm-light-text);
+            --text-secondary:var(--gray-400); --text-muted:var(--gray-600); --border:var(--gray-800);
+            --primary:var(--blue-200); --primary-light:var(--blue-900);
+            --secondary:var(--green-200); --secondary-light:var(--green-900);
+        }
+
+        /* ── Language system ───────────────────────────────────────────── */
+        [data-lang] .en, [data-lang] .fr, [data-lang] .es, [data-lang] .pt { display: none !important; }
+        [data-lang="en"] .en, [data-lang="fr"] .fr, [data-lang="es"] .es, [data-lang="pt"] .pt { display: inline !important; }
+        [data-lang="en"] .en-block, [data-lang="fr"] .fr-block, [data-lang="es"] .es-block, [data-lang="pt"] .pt-block { display: block !important; }
+        [data-lang] .en-block, [data-lang] .fr-block, [data-lang] .es-block, [data-lang] .pt-block { display: none !important; }
+        [data-lang="en"] .en-flex, [data-lang="fr"] .fr-flex, [data-lang="es"] .es-flex, [data-lang="pt"] .pt-flex { display: flex !important; }
+        [data-lang] .en-flex, [data-lang] .fr-flex, [data-lang] .es-flex, [data-lang] .pt-flex { display: none !important; }
+        [data-lang="en"] .en-grid, [data-lang="fr"] .fr-grid, [data-lang="es"] .es-grid, [data-lang="pt"] .pt-grid { display: grid !important; }
+        [data-lang] .en-grid, [data-lang] .fr-grid, [data-lang] .es-grid, [data-lang] .pt-grid { display: none !important; }
+
+        /* ── Typography ────────────────────────────────────────────────── */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg); color: var(--text-primary);
+            line-height: 1.6; transition: background 0.3s, color 0.3s;
+        }
+        h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ── Layout ────────────────────────────────────────────────────── */
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 80px 0; }
+
+        /* ── Nav ───────────────────────────────────────────────────────── */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--bg); border-bottom: 1px solid var(--border);
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .nav-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1080px; margin: 0 auto; padding: 12px 24px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-brand span {
+            font-size: 1.15rem; font-weight: 700; color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .nav-links { display: flex; align-items: center; gap: 24px; }
+        .nav-links a {
+            font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); text-decoration: none; }
+        .nav-btn {
+            background: none; border: 1px solid var(--border); border-radius: 8px;
+            padding: 6px 10px; cursor: pointer; font-size: 1rem; color: var(--text-primary);
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .nav-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        .nav-text-link { display: inline; }
+
+        @media (max-width: 768px) {
+            .nav-text-link { display: none; }
+        }
+
+        /* ── Hero ──────────────────────────────────────────────────────── */
+        .hero {
+            text-align: center; padding: 100px 0 80px;
+        }
+        .hero-logo { margin-bottom: 24px; }
+        .hero h1 {
+            font-size: 2.8rem; letter-spacing: -0.03em; margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        .hero .tagline {
+            font-size: 1.2rem; color: var(--text-secondary); max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ── Manifesto ─────────────────────────────────────────────────── */
+        .manifesto {
+            text-align: center; padding: 60px 0 80px;
+        }
+        .manifesto-text {
+            max-width: 600px; margin: 0 auto;
+            font-size: 1.15rem; line-height: 1.9; color: var(--text-secondary);
+        }
+        .manifesto-text strong { color: var(--text-primary); font-weight: 600; }
+        .manifesto-text .signature {
+            margin-top: 32px; font-style: italic; color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* ── Trust ─────────────────────────────────────────────────────── */
+        .trust { padding: 80px 0; }
+        .section-title {
+            text-align: center; font-size: 2rem; margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .section-subtitle {
+            text-align: center; color: var(--text-secondary); margin-bottom: 48px;
+            font-size: 1.05rem;
+        }
+        .trust-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+        }
+        .trust-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 32px 24px; text-align: center;
+            transition: background 0.3s, border-color 0.3s, transform 0.2s;
+        }
+        .trust-card:hover { transform: translateY(-2px); }
+        .trust-icon {
+            width: 48px; height: 48px; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px;
+        }
+        .trust-icon svg { width: 28px; height: 28px; }
+        .trust-card h3 { font-size: 1rem; margin-bottom: 8px; }
+        .trust-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; }
+
+        @media (max-width: 768px) {
+            .trust-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .trust-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Apps ──────────────────────────────────────────────────────── */
+        .apps { padding: 80px 0; }
+        .app-card {
+            display: grid; grid-template-columns: 1fr auto; gap: 48px;
+            align-items: center; margin-bottom: 80px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 24px; padding: 48px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .app-card:last-child { margin-bottom: 0; }
+        .app-card.reverse { direction: rtl; }
+        .app-card.reverse > * { direction: ltr; }
+        .app-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--primary-light); color: var(--primary);
+            padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 16px;
+        }
+        .app-badge svg { width: 18px; height: 18px; }
+        .app-info h3 {
+            font-size: 1.6rem; margin-bottom: 8px; letter-spacing: -0.02em;
+        }
+        .app-tagline {
+            font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 20px;
+        }
+        .app-features {
+            list-style: none; margin-bottom: 28px;
+        }
+        .app-features li {
+            padding: 5px 0; font-size: 0.92rem; color: var(--text-secondary);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .app-features li::before {
+            content: '';
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: var(--primary); flex-shrink: 0;
+        }
+        .app-cta {
+            display: inline-block; background: var(--primary); color: #fff;
+            padding: 12px 28px; border-radius: 12px; font-weight: 600;
+            font-size: 0.95rem; transition: opacity 0.2s; text-decoration: none;
+        }
+        .app-cta:hover { opacity: 0.88; text-decoration: none; }
+
+        .app-screenshot { display: flex; justify-content: center; }
+        .phone-frame {
+            width: 240px; border-radius: 28px; overflow: hidden;
+            border: 3px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .phone-frame img { width: 100%; height: auto; display: block; }
+        .screenshot-dark { display: none; }
+        [data-theme="dark"] .screenshot-light { display: none; }
+        [data-theme="dark"] .screenshot-dark { display: block; }
+
+        @media (max-width: 768px) {
+            .app-card {
+                grid-template-columns: 1fr; padding: 32px 24px; gap: 32px;
+            }
+            .app-card.reverse { direction: ltr; }
+            .app-screenshot { order: -1; }
+            .phone-frame { width: 200px; }
+        }
+
+        /* ── Data Transparency ─────────────────────────────────────────── */
+        .data-section { padding: 80px 0; }
+        .data-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+            margin-bottom: 40px;
+        }
+        .data-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 28px; transition: background 0.3s, border-color 0.3s;
+        }
+        .data-card h4 {
+            font-size: 1.1rem; margin-bottom: 4px;
+        }
+        .data-card .data-app-tag {
+            font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;
+            display: block;
+        }
+        .data-card ul {
+            list-style: none; margin-bottom: 16px;
+        }
+        .data-card ul li {
+            padding: 4px 0; font-size: 0.88rem; color: var(--text-secondary);
+            display: flex; align-items: flex-start; gap: 8px;
+        }
+        .data-card ul li .data-icon { flex-shrink: 0; font-size: 0.85rem; }
+        .data-card .data-note {
+            font-size: 0.82rem; color: var(--text-muted); font-style: italic;
+            border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;
+        }
+        .data-never {
+            background: var(--secondary-light); border: 1px solid var(--secondary);
+            border-radius: 16px; padding: 28px; text-align: center;
+        }
+        .data-never h4 { font-size: 1.05rem; color: var(--secondary); margin-bottom: 16px; }
+        .data-never-list {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px;
+            list-style: none;
+        }
+        .data-never-list li {
+            font-size: 0.92rem; color: var(--text-secondary);
+            display: flex; align-items: center; gap: 6px; font-weight: 500;
+        }
+        .data-never-list li::before {
+            content: '';
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+            background: var(--secondary); flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .data-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Stats ─────────────────────────────────────────────────────── */
+        .stats { padding: 80px 0; }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+            text-align: center;
+        }
+        .stat-item { padding: 24px 16px; }
+        .stat-number {
+            font-size: 2.4rem; font-weight: 800; color: var(--primary);
+            letter-spacing: -0.03em;
+        }
+        .stat-label {
+            font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── Contact ───────────────────────────────────────────────────── */
+        .contact { padding: 80px 0; }
+        .contact-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+        }
+        .contact-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; text-align: center;
+            transition: background 0.3s, border-color 0.3s, transform 0.2s;
+        }
+        .contact-card:hover { transform: translateY(-2px); }
+        .contact-card .contact-email {
+            font-size: 1rem; font-weight: 600; color: var(--primary);
+            display: block; margin-bottom: 6px;
+        }
+        .contact-card .contact-desc {
+            font-size: 0.85rem; color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Footer ────────────────────────────────────────────────────── */
+        footer {
+            border-top: 1px solid var(--border); padding: 32px 0;
+            text-align: center; transition: border-color 0.3s;
+        }
+        footer p {
+            font-size: 0.85rem; color: var(--text-muted);
+        }
+        footer a { color: var(--text-secondary); }
+        footer a:hover { color: var(--primary); }
+
+        /* ── Utilities ─────────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .tagline { font-size: 1.05rem; }
+            .section-title { font-size: 1.6rem; }
+            section { padding: 60px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     NAV
+     ════════════════════════════════════════════════════════════════════ -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+            <span>ClairTools</span>
+        </a>
+        <div class="nav-links">
+            <a href="#trust" class="nav-text-link">
+                <span class="en">Trust</span>
+                <span class="fr">Confiance</span>
+                <span class="es">Confianza</span>
+                <span class="pt">Confian&ccedil;a</span>
+            </a>
+            <a href="#apps" class="nav-text-link">
+                <span class="en">Apps</span>
+                <span class="fr">Apps</span>
+                <span class="es">Apps</span>
+                <span class="pt">Apps</span>
+            </a>
+            <a href="#data" class="nav-text-link">
+                <span class="en">Data</span>
+                <span class="fr">Donn&eacute;es</span>
+                <span class="es">Datos</span>
+                <span class="pt">Dados</span>
+            </a>
+            <a href="#contact" class="nav-text-link">
+                <span class="en">Contact</span>
+                <span class="fr">Contact</span>
+                <span class="es">Contacto</span>
+                <span class="pt">Contato</span>
+            </a>
+            <button class="nav-btn" id="lang-btn" aria-label="Change language" title="Change language"></button>
+            <button class="nav-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle theme"></button>
+        </div>
+    </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-logo">
+            <svg width="80" height="80" viewBox="0 0 48 48" fill="none">
+                <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h1>ClairTools</h1>
+        <p class="tagline">
+            <span class="en">Simple tools, honestly made.</span>
+            <span class="fr">Des outils simples, honn&ecirc;tement con&ccedil;us.</span>
+            <span class="es">Herramientas simples, hechas con honestidad.</span>
+            <span class="pt">Ferramentas simples, feitas com honestidade.</span>
+        </p>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     MANIFESTO
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="manifesto">
+    <div class="container">
+
+        <!-- EN -->
+        <div class="manifesto-text en-block">
+            <p><strong>We believe tools should be simple.</strong><br>
+            You need a result. We give you that result.</p>
+            <br>
+            <p>Your attention is protected. Always.<br>
+            Your data stays yours. Period.<br>
+            One fair price. Forever.<br>
+            Honest, straightforward design.</p>
+            <br>
+            <p>Pay once for what you need. Use it forever.</p>
+            <p class="signature">&mdash; ClairTools / It&rsquo;s clear. That&rsquo;s all.</p>
+        </div>
+
+        <!-- FR -->
+        <div class="manifesto-text fr-block">
+            <p><strong>On croit que les outils devraient &ecirc;tre simples.</strong><br>
+            Tu as besoin d&rsquo;un r&eacute;sultat. On te donne ce r&eacute;sultat.</p>
+            <br>
+            <p>Ton attention est prot&eacute;g&eacute;e. Toujours.<br>
+            Tes donn&eacute;es restent les tiennes. Point final.<br>
+            Un prix juste. Pour toujours.<br>
+            Un design honn&ecirc;te et direct.</p>
+            <br>
+            <p>Paie une fois pour ce dont tu as besoin. Utilise-le pour toujours.</p>
+            <p class="signature">&mdash; ClairTools / C&rsquo;est clair. C&rsquo;est tout.</p>
+        </div>
+
+        <!-- ES -->
+        <div class="manifesto-text es-block">
+            <p><strong>Creemos que las herramientas deber&iacute;an ser simples.</strong><br>
+            Necesitas un resultado. Te damos ese resultado.</p>
+            <br>
+            <p>Tu atenci&oacute;n est&aacute; protegida. Siempre.<br>
+            Tus datos son tuyos. Punto.<br>
+            Un precio justo. Para siempre.<br>
+            Dise&ntilde;o honesto y directo.</p>
+            <br>
+            <p>Paga una vez por lo que necesitas. &Uacute;salo para siempre.</p>
+            <p class="signature">&mdash; ClairTools / Est&aacute; claro. Eso es todo.</p>
+        </div>
+
+        <!-- PT -->
+        <div class="manifesto-text pt-block">
+            <p><strong>A gente acredita que ferramentas devem ser simples.</strong><br>
+            Voc&ecirc; precisa de um resultado. A gente te d&aacute; esse resultado.</p>
+            <br>
+            <p>Sua aten&ccedil;&atilde;o est&aacute; protegida. Sempre.<br>
+            Seus dados s&atilde;o seus. Ponto final.<br>
+            Um pre&ccedil;o justo. Para sempre.<br>
+            Design honesto e direto.</p>
+            <br>
+            <p>Pague uma vez pelo que voc&ecirc; precisa. Use para sempre.</p>
+            <p class="signature">&mdash; ClairTools / &Eacute; claro. S&oacute; isso.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TRUST
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="trust" id="trust">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="en">Built on trust</span>
+            <span class="fr">B&acirc;ti sur la confiance</span>
+            <span class="es">Construido con confianza</span>
+            <span class="pt">Constru&iacute;do com confian&ccedil;a</span>
+        </h2>
+        <p class="section-subtitle">
+            <span class="en">Four promises. No exceptions.</span>
+            <span class="fr">Quatre promesses. Sans exception.</span>
+            <span class="es">Cuatro promesas. Sin excepciones.</span>
+            <span class="pt">Quatro promessas. Sem exce&ccedil;&otilde;es.</span>
+        </p>
+
+        <div class="trust-grid">
+
+            <!-- Ad-Free -->
+            <div class="trust-card">
+                <div class="trust-icon" style="background:var(--primary-light);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="4" y1="4" x2="20" y2="20"/>
+                    </svg>
+                </div>
+                <h3>
+                    <span class="en">Ad-Free</span>
+                    <span class="fr">Sans pub</span>
+                    <span class="es">Sin anuncios</span>
+                    <span class="pt">Sem an&uacute;ncios</span>
+                </h3>
+                <p>
+                    <span class="en">No ads. No banners. No interruptions. Your screen is yours.</span>
+                    <span class="fr">Pas de pub. Pas de banni&egrave;res. Pas d&rsquo;interruptions. Ton &eacute;cran est &agrave; toi.</span>
+                    <span class="es">Sin anuncios. Sin banners. Sin interrupciones. Tu pantalla es tuya.</span>
+                    <span class="pt">Sem an&uacute;ncios. Sem banners. Sem interrup&ccedil;&otilde;es. Sua tela &eacute; sua.</span>
+                </p>
+            </div>
+
+            <!-- Privacy -->
+            <div class="trust-card">
+                <div class="trust-icon" style="background:var(--secondary-light);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>
+                    <span class="en">Privacy Protected</span>
+                    <span class="fr">Vie priv&eacute;e prot&eacute;g&eacute;e</span>
+                    <span class="es">Privacidad protegida</span>
+                    <span class="pt">Privacidade protegida</span>
+                </h3>
+                <p>
+                    <span class="en">No tracking. No data sold. No accounts. We don&rsquo;t know who you are.</span>
+                    <span class="fr">Pas de tra&ccedil;age. Pas de donn&eacute;es vendues. Pas de compte. On ne sait pas qui tu es.</span>
+                    <span class="es">Sin rastreo. Sin venta de datos. Sin cuentas. No sabemos qui&eacute;n eres.</span>
+                    <span class="pt">Sem rastreamento. Sem venda de dados. Sem contas. A gente n&atilde;o sabe quem voc&ecirc; &eacute;.</span>
+                </p>
+            </div>
+
+            <!-- Device Only -->
+            <div class="trust-card">
+                <div class="trust-icon" style="background:var(--primary-light);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12" y2="18"/>
+                    </svg>
+                </div>
+                <h3>
+                    <span class="en">Device Only</span>
+                    <span class="fr">Sur ton appareil</span>
+                    <span class="es">Solo en tu dispositivo</span>
+                    <span class="pt">S&oacute; no seu aparelho</span>
+                </h3>
+                <p>
+                    <span class="en">Your files stay on your device. Nothing is uploaded. Nothing leaves.</span>
+                    <span class="fr">Tes fichiers restent sur ton appareil. Rien n&rsquo;est envoy&eacute;. Rien ne sort.</span>
+                    <span class="es">Tus archivos se quedan en tu dispositivo. Nada se sube. Nada sale.</span>
+                    <span class="pt">Seus arquivos ficam no seu aparelho. Nada &eacute; enviado. Nada sai.</span>
+                </p>
+            </div>
+
+            <!-- Fair Pricing -->
+            <div class="trust-card">
+                <div class="trust-icon" style="background:var(--secondary-light);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                    </svg>
+                </div>
+                <h3>
+                    <span class="en">Fair Pricing</span>
+                    <span class="fr">Prix juste</span>
+                    <span class="es">Precio justo</span>
+                    <span class="pt">Pre&ccedil;o justo</span>
+                </h3>
+                <p>
+                    <span class="en">Pay once. No subscriptions. No tricks. Yours forever.</span>
+                    <span class="fr">Paie une fois. Pas d&rsquo;abonnement. Pas de pi&egrave;ge. &Agrave; toi pour toujours.</span>
+                    <span class="es">Paga una vez. Sin suscripciones. Sin trucos. Tuyo para siempre.</span>
+                    <span class="pt">Pague uma vez. Sem assinaturas. Sem truques. Seu para sempre.</span>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     APPS
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="apps" id="apps">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="en">The apps</span>
+            <span class="fr">Les apps</span>
+            <span class="es">Las apps</span>
+            <span class="pt">Os apps</span>
+        </h2>
+        <p class="section-subtitle">
+            <span class="en">Three tools. One promise.</span>
+            <span class="fr">Trois outils. Une promesse.</span>
+            <span class="es">Tres herramientas. Una promesa.</span>
+            <span class="pt">Tr&ecirc;s ferramentas. Uma promessa.</span>
+        </p>
+
+        <!-- ── Prompter ──────────────────────────────────────────────── -->
+        <div class="app-card">
+            <div class="app-info">
+                <div class="app-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                    </svg>
+                    <span>Prompter</span>
+                </div>
+                <h3>ClairTools Prompter</h3>
+                <p class="app-tagline">
+                    <span class="en">Read your script. Look at the camera.</span>
+                    <span class="fr">Lis ton texte. Regarde la cam&eacute;ra.</span>
+                    <span class="es">Lee tu gui&oacute;n. Mira a la c&aacute;mara.</span>
+                    <span class="pt">Leia seu roteiro. Olhe para a c&acirc;mera.</span>
+                </p>
+
+                <!-- EN features -->
+                <ul class="app-features en-block">
+                    <li>Smooth scrolling teleprompter</li>
+                    <li>Camera recording with script overlay</li>
+                    <li>Floating overlay for live streaming</li>
+                    <li>Mirror mode, speed control, countdown</li>
+                    <li>AI Script Generator</li>
+                    <li>Script templates</li>
+                </ul>
+                <!-- FR features -->
+                <ul class="app-features fr-block">
+                    <li>T&eacute;l&eacute;prompteur &agrave; d&eacute;filement fluide</li>
+                    <li>Enregistrement cam&eacute;ra avec superposition du texte</li>
+                    <li>Overlay flottant pour le streaming</li>
+                    <li>Mode miroir, contr&ocirc;le de vitesse, compte &agrave; rebours</li>
+                    <li>G&eacute;n&eacute;rateur de scripts IA</li>
+                    <li>Mod&egrave;les de scripts</li>
+                </ul>
+                <!-- ES features -->
+                <ul class="app-features es-block">
+                    <li>Teleprompter de desplazamiento suave</li>
+                    <li>Grabaci&oacute;n con superposici&oacute;n de gui&oacute;n</li>
+                    <li>Overlay flotante para streaming</li>
+                    <li>Modo espejo, control de velocidad, cuenta atr&aacute;s</li>
+                    <li>Generador de guiones con IA</li>
+                    <li>Plantillas de guiones</li>
+                </ul>
+                <!-- PT features -->
+                <ul class="app-features pt-block">
+                    <li>Teleprompter com rolagem suave</li>
+                    <li>Grava&ccedil;&atilde;o com sobreposi&ccedil;&atilde;o do roteiro</li>
+                    <li>Overlay flutuante para streaming</li>
+                    <li>Modo espelho, controle de velocidade, contagem regressiva</li>
+                    <li>Gerador de roteiros com IA</li>
+                    <li>Modelos de roteiros</li>
+                </ul>
+
+                <a href="https://play.google.com/store/apps/details?id=com.clairtools.prompter" class="app-cta">
+                    <span class="en">Get Prompter</span>
+                    <span class="fr">T&eacute;l&eacute;charger Prompter</span>
+                    <span class="es">Descargar Prompter</span>
+                    <span class="pt">Baixar Prompter</span>
+                </a>
+            </div>
+            <div class="app-screenshot">
+                <div class="phone-frame">
+                    <img class="screenshot-light" src="img/prompter-light.png" alt="Prompter screenshot" loading="lazy">
+                    <img class="screenshot-dark" src="img/prompter-dark.png" alt="Prompter screenshot" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Vault ─────────────────────────────────────────────────── -->
+        <div class="app-card reverse">
+            <div class="app-info">
+                <div class="app-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0110 0v4"/>
+                    </svg>
+                    <span>Vault</span>
+                </div>
+                <h3>ClairTools Vault</h3>
+                <p class="app-tagline">
+                    <span class="en">Your photos. Your secret.</span>
+                    <span class="fr">Tes photos. Ton secret.</span>
+                    <span class="es">Tus fotos. Tu secreto.</span>
+                    <span class="pt">Suas fotos. Seu segredo.</span>
+                </p>
+
+                <!-- EN features -->
+                <ul class="app-features en-block">
+                    <li>AES-256-GCM encryption</li>
+                    <li>Calculator disguise</li>
+                    <li>Fingerprint / Face unlock</li>
+                    <li>Decoy PIN</li>
+                    <li>Albums &amp; folders</li>
+                    <li>Encrypted text notes</li>
+                    <li>Face-down lock</li>
+                </ul>
+                <!-- FR features -->
+                <ul class="app-features fr-block">
+                    <li>Chiffrement AES-256-GCM</li>
+                    <li>D&eacute;guisement calculatrice</li>
+                    <li>D&eacute;verrouillage empreinte / visage</li>
+                    <li>Code PIN leurre</li>
+                    <li>Albums et dossiers</li>
+                    <li>Notes texte chiffr&eacute;es</li>
+                    <li>Verrouillage face vers le bas</li>
+                </ul>
+                <!-- ES features -->
+                <ul class="app-features es-block">
+                    <li>Cifrado AES-256-GCM</li>
+                    <li>Disfraz de calculadora</li>
+                    <li>Desbloqueo con huella / rostro</li>
+                    <li>PIN se&ntilde;uelo</li>
+                    <li>&Aacute;lbumes y carpetas</li>
+                    <li>Notas de texto cifradas</li>
+                    <li>Bloqueo boca abajo</li>
+                </ul>
+                <!-- PT features -->
+                <ul class="app-features pt-block">
+                    <li>Criptografia AES-256-GCM</li>
+                    <li>Disfarce de calculadora</li>
+                    <li>Desbloqueio por digital / rosto</li>
+                    <li>PIN falso</li>
+                    <li>&Aacute;lbuns e pastas</li>
+                    <li>Notas de texto criptografadas</li>
+                    <li>Bloqueio ao virar o celular</li>
+                </ul>
+
+                <a href="https://play.google.com/store/apps/details?id=com.clairtools.vault" class="app-cta">
+                    <span class="en">Get Vault</span>
+                    <span class="fr">T&eacute;l&eacute;charger Vault</span>
+                    <span class="es">Descargar Vault</span>
+                    <span class="pt">Baixar Vault</span>
+                </a>
+            </div>
+            <div class="app-screenshot">
+                <div class="phone-frame">
+                    <img class="screenshot-light" src="img/vault-light.png" alt="Vault screenshot" loading="lazy">
+                    <img class="screenshot-dark" src="img/vault-dark.png" alt="Vault screenshot" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <!-- ── MoveProof ─────────────────────────────────────────────── -->
+        <div class="app-card">
+            <div class="app-info">
+                <div class="app-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>MoveProof</span>
+                </div>
+                <h3>ClairTools MoveProof</h3>
+                <p class="app-tagline">
+                    <span class="en">Document everything. Prove anything.</span>
+                    <span class="fr">Documente tout. Prouve tout.</span>
+                    <span class="es">Documenta todo. Demuestra todo.</span>
+                    <span class="pt">Documente tudo. Prove tudo.</span>
+                </p>
+
+                <!-- EN features -->
+                <ul class="app-features en-block">
+                    <li>Room-by-room inspection</li>
+                    <li>GPS-tagged timestamped photos</li>
+                    <li>Tamper-proof PDF reports</li>
+                    <li>Move-in &amp; move-out tracking</li>
+                    <li>Condition status per item</li>
+                    <li>Share reports with landlord</li>
+                    <li>AR measurement</li>
+                </ul>
+                <!-- FR features -->
+                <ul class="app-features fr-block">
+                    <li>Inspection pi&egrave;ce par pi&egrave;ce</li>
+                    <li>Photos horodat&eacute;es avec GPS</li>
+                    <li>Rapports PDF infalsifiables</li>
+                    <li>Suivi entr&eacute;e et sortie</li>
+                    <li>&Eacute;tat de chaque &eacute;l&eacute;ment</li>
+                    <li>Partage des rapports au propri&eacute;taire</li>
+                    <li>Mesure en r&eacute;alit&eacute; augment&eacute;e</li>
+                </ul>
+                <!-- ES features -->
+                <ul class="app-features es-block">
+                    <li>Inspecci&oacute;n habitaci&oacute;n por habitaci&oacute;n</li>
+                    <li>Fotos con GPS y marca de tiempo</li>
+                    <li>Informes PDF a prueba de manipulaci&oacute;n</li>
+                    <li>Seguimiento de entrada y salida</li>
+                    <li>Estado de cada elemento</li>
+                    <li>Comparte informes con el propietario</li>
+                    <li>Medici&oacute;n con realidad aumentada</li>
+                </ul>
+                <!-- PT features -->
+                <ul class="app-features pt-block">
+                    <li>Inspe&ccedil;&atilde;o c&ocirc;modo por c&ocirc;modo</li>
+                    <li>Fotos com GPS e carimbo de data</li>
+                    <li>Relat&oacute;rios PDF &agrave; prova de adultera&ccedil;&atilde;o</li>
+                    <li>Acompanhamento de entrada e sa&iacute;da</li>
+                    <li>Estado de cada item</li>
+                    <li>Compartilhe relat&oacute;rios com o propriet&aacute;rio</li>
+                    <li>Medi&ccedil;&atilde;o com realidade aumentada</li>
+                </ul>
+
+                <a href="https://play.google.com/store/apps/details?id=com.clairtools.moveproof" class="app-cta">
+                    <span class="en">Get MoveProof</span>
+                    <span class="fr">T&eacute;l&eacute;charger MoveProof</span>
+                    <span class="es">Descargar MoveProof</span>
+                    <span class="pt">Baixar MoveProof</span>
+                </a>
+            </div>
+            <div class="app-screenshot">
+                <div class="phone-frame">
+                    <img class="screenshot-light" src="img/moveproof-light.png" alt="MoveProof screenshot" loading="lazy">
+                    <img class="screenshot-dark" src="img/moveproof-dark.png" alt="MoveProof screenshot" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     DATA TRANSPARENCY
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="data-section" id="data">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="en">What your data does</span>
+            <span class="fr">Ce que tes donn&eacute;es font</span>
+            <span class="es">Qu&eacute; hacen tus datos</span>
+            <span class="pt">O que seus dados fazem</span>
+        </h2>
+        <p class="section-subtitle">
+            <span class="en">We believe transparency is respect. Here&rsquo;s exactly what happens.</span>
+            <span class="fr">On croit que la transparence, c&rsquo;est du respect. Voici exactement ce qui se passe.</span>
+            <span class="es">Creemos que la transparencia es respeto. Esto es exactamente lo que pasa.</span>
+            <span class="pt">A gente acredita que transpar&ecirc;ncia &eacute; respeito. Aqui est&aacute; exatamente o que acontece.</span>
+        </p>
+
+        <div class="data-grid">
+
+            <!-- Prompter data -->
+            <div class="data-card">
+                <h4>Prompter</h4>
+                <span class="data-app-tag">
+                    <span class="en">Teleprompter &amp; recording</span>
+                    <span class="fr">T&eacute;l&eacute;prompteur et enregistrement</span>
+                    <span class="es">Teleprompter y grabaci&oacute;n</span>
+                    <span class="pt">Teleprompter e grava&ccedil;&atilde;o</span>
+                </span>
+                <ul>
+                    <li>
+                        <span class="data-icon">&#x1F6E0;</span>
+                        <span>
+                            <span class="en">Firebase Crashlytics &mdash; crash reports</span>
+                            <span class="fr">Firebase Crashlytics &mdash; rapports de plantage</span>
+                            <span class="es">Firebase Crashlytics &mdash; informes de fallos</span>
+                            <span class="pt">Firebase Crashlytics &mdash; relat&oacute;rios de falhas</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F4CA;</span>
+                        <span>
+                            <span class="en">Firebase Analytics &mdash; anonymous, ad tracking DENIED</span>
+                            <span class="fr">Firebase Analytics &mdash; anonyme, tra&ccedil;age pub REFUS&Eacute;</span>
+                            <span class="es">Firebase Analytics &mdash; an&oacute;nimo, rastreo de anuncios DENEGADO</span>
+                            <span class="pt">Firebase Analytics &mdash; an&ocirc;nimo, rastreamento de an&uacute;ncios NEGADO</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F4B3;</span>
+                        <span>
+                            <span class="en">RevenueCat &mdash; purchase verification</span>
+                            <span class="fr">RevenueCat &mdash; v&eacute;rification des achats</span>
+                            <span class="es">RevenueCat &mdash; verificaci&oacute;n de compras</span>
+                            <span class="pt">RevenueCat &mdash; verifica&ccedil;&atilde;o de compras</span>
+                        </span>
+                    </li>
+                </ul>
+                <p class="data-note">
+                    <span class="en">No accounts. No data sold.</span>
+                    <span class="fr">Pas de compte. Aucune donn&eacute;e vendue.</span>
+                    <span class="es">Sin cuentas. Ning&uacute;n dato vendido.</span>
+                    <span class="pt">Sem contas. Nenhum dado vendido.</span>
+                </p>
+            </div>
+
+            <!-- Vault data -->
+            <div class="data-card">
+                <h4>Vault</h4>
+                <span class="data-app-tag">
+                    <span class="en">Encrypted photo vault</span>
+                    <span class="fr">Coffre photo chiffr&eacute;</span>
+                    <span class="es">B&oacute;veda de fotos cifrada</span>
+                    <span class="pt">Cofre de fotos criptografado</span>
+                </span>
+                <ul>
+                    <li>
+                        <span class="data-icon">&#x1F4B3;</span>
+                        <span>
+                            <span class="en">RevenueCat &mdash; purchase verification ONLY</span>
+                            <span class="fr">RevenueCat &mdash; v&eacute;rification des achats UNIQUEMENT</span>
+                            <span class="es">RevenueCat &mdash; SOLO verificaci&oacute;n de compras</span>
+                            <span class="pt">RevenueCat &mdash; APENAS verifica&ccedil;&atilde;o de compras</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F6AB;</span>
+                        <span>
+                            <span class="en">Zero analytics. Zero Firebase.</span>
+                            <span class="fr">Z&eacute;ro analytics. Z&eacute;ro Firebase.</span>
+                            <span class="es">Cero analytics. Cero Firebase.</span>
+                            <span class="pt">Zero analytics. Zero Firebase.</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F310;</span>
+                        <span>
+                            <span class="en">INTERNET permission is solely for purchase verification</span>
+                            <span class="fr">La permission INTERNET sert uniquement &agrave; v&eacute;rifier les achats</span>
+                            <span class="es">El permiso INTERNET es solo para verificaci&oacute;n de compras</span>
+                            <span class="pt">A permiss&atilde;o INTERNET &eacute; s&oacute; para verifica&ccedil;&atilde;o de compras</span>
+                        </span>
+                    </li>
+                </ul>
+                <p class="data-note">
+                    <span class="en">Most private app. Period.</span>
+                    <span class="fr">L&rsquo;app la plus priv&eacute;e. Point.</span>
+                    <span class="es">La app m&aacute;s privada. Punto.</span>
+                    <span class="pt">O app mais privado. Ponto.</span>
+                </p>
+            </div>
+
+            <!-- MoveProof data -->
+            <div class="data-card">
+                <h4>MoveProof</h4>
+                <span class="data-app-tag">
+                    <span class="en">Property inspection</span>
+                    <span class="fr">Inspection immobili&egrave;re</span>
+                    <span class="es">Inspecci&oacute;n de propiedades</span>
+                    <span class="pt">Inspe&ccedil;&atilde;o de im&oacute;veis</span>
+                </span>
+                <ul>
+                    <li>
+                        <span class="data-icon">&#x1F6E0;</span>
+                        <span>
+                            <span class="en">Firebase Crashlytics &mdash; crash reports</span>
+                            <span class="fr">Firebase Crashlytics &mdash; rapports de plantage</span>
+                            <span class="es">Firebase Crashlytics &mdash; informes de fallos</span>
+                            <span class="pt">Firebase Crashlytics &mdash; relat&oacute;rios de falhas</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F4CA;</span>
+                        <span>
+                            <span class="en">Firebase Analytics &mdash; anonymous, ad tracking DENIED</span>
+                            <span class="fr">Firebase Analytics &mdash; anonyme, tra&ccedil;age pub REFUS&Eacute;</span>
+                            <span class="es">Firebase Analytics &mdash; an&oacute;nimo, rastreo de anuncios DENEGADO</span>
+                            <span class="pt">Firebase Analytics &mdash; an&ocirc;nimo, rastreamento de an&uacute;ncios NEGADO</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F4B3;</span>
+                        <span>
+                            <span class="en">RevenueCat &mdash; purchase verification</span>
+                            <span class="fr">RevenueCat &mdash; v&eacute;rification des achats</span>
+                            <span class="es">RevenueCat &mdash; verificaci&oacute;n de compras</span>
+                            <span class="pt">RevenueCat &mdash; verifica&ccedil;&atilde;o de compras</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="data-icon">&#x1F4CD;</span>
+                        <span>
+                            <span class="en">GPS used for photo overlay only &mdash; never uploaded</span>
+                            <span class="fr">GPS utilis&eacute; pour la superposition photo uniquement &mdash; jamais envoy&eacute;</span>
+                            <span class="es">GPS usado solo para la superposici&oacute;n en fotos &mdash; nunca enviado</span>
+                            <span class="pt">GPS usado s&oacute; para sobreposi&ccedil;&atilde;o na foto &mdash; nunca enviado</span>
+                        </span>
+                    </li>
+                </ul>
+                <p class="data-note">
+                    <span class="en">No accounts. No data sold.</span>
+                    <span class="fr">Pas de compte. Aucune donn&eacute;e vendue.</span>
+                    <span class="es">Sin cuentas. Ning&uacute;n dato vendido.</span>
+                    <span class="pt">Sem contas. Nenhum dado vendido.</span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- NEVER list -->
+        <div class="data-never">
+            <h4>
+                <span class="en">What we NEVER do</span>
+                <span class="fr">Ce qu&rsquo;on ne fait JAMAIS</span>
+                <span class="es">Lo que NUNCA hacemos</span>
+                <span class="pt">O que a gente NUNCA faz</span>
+            </h4>
+            <ul class="data-never-list">
+                <li>
+                    <span class="en">Sell data</span>
+                    <span class="fr">Vendre des donn&eacute;es</span>
+                    <span class="es">Vender datos</span>
+                    <span class="pt">Vender dados</span>
+                </li>
+                <li>
+                    <span class="en">Show ads</span>
+                    <span class="fr">Afficher des pubs</span>
+                    <span class="es">Mostrar anuncios</span>
+                    <span class="pt">Mostrar an&uacute;ncios</span>
+                </li>
+                <li>
+                    <span class="en">Track you</span>
+                    <span class="fr">Te tracer</span>
+                    <span class="es">Rastrearte</span>
+                    <span class="pt">Rastrear voc&ecirc;</span>
+                </li>
+                <li>
+                    <span class="en">Create accounts</span>
+                    <span class="fr">Cr&eacute;er des comptes</span>
+                    <span class="es">Crear cuentas</span>
+                    <span class="pt">Criar contas</span>
+                </li>
+                <li>
+                    <span class="en">Upload your files</span>
+                    <span class="fr">Envoyer tes fichiers</span>
+                    <span class="es">Subir tus archivos</span>
+                    <span class="pt">Enviar seus arquivos</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     STATS
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label">
+                    <span class="en">Ads. Ever.</span>
+                    <span class="fr">Pub. Jamais.</span>
+                    <span class="es">Anuncios. Jam&aacute;s.</span>
+                    <span class="pt">An&uacute;ncios. Nunca.</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label">
+                    <span class="en">Data sold</span>
+                    <span class="fr">Donn&eacute;es vendues</span>
+                    <span class="es">Datos vendidos</span>
+                    <span class="pt">Dados vendidos</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">
+                    <span class="en">On device</span>
+                    <span class="fr">Sur l&rsquo;appareil</span>
+                    <span class="es">En el dispositivo</span>
+                    <span class="pt">No aparelho</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">
+                    <span class="en">Apps, one promise</span>
+                    <span class="fr">Apps, une promesse</span>
+                    <span class="es">Apps, una promesa</span>
+                    <span class="pt">Apps, uma promessa</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CONTACT
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="contact" id="contact">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="en">Get in touch</span>
+            <span class="fr">&Eacute;cris-nous</span>
+            <span class="es">Escr&iacute;benos</span>
+            <span class="pt">Fale com a gente</span>
+        </h2>
+        <p class="section-subtitle">
+            <span class="en">Real humans. Real emails. No bots.</span>
+            <span class="fr">De vrais humains. De vrais emails. Pas de bots.</span>
+            <span class="es">Humanos reales. Emails reales. Sin bots.</span>
+            <span class="pt">Humanos de verdade. Emails de verdade. Sem bots.</span>
+        </p>
+
+        <div class="contact-grid">
+            <div class="contact-card">
+                <a href="mailto:allo@clair.tools" class="contact-email">allo@clair.tools</a>
+                <span class="contact-desc">
+                    <span class="en">General support</span>
+                    <span class="fr">Support g&eacute;n&eacute;ral</span>
+                    <span class="es">Soporte general</span>
+                    <span class="pt">Suporte geral</span>
+                </span>
+            </div>
+            <div class="contact-card">
+                <a href="mailto:bug@clair.tools" class="contact-email">bug@clair.tools</a>
+                <span class="contact-desc">
+                    <span class="en">Bug reports</span>
+                    <span class="fr">Rapports de bugs</span>
+                    <span class="es">Reportar errores</span>
+                    <span class="pt">Relatar bugs</span>
+                </span>
+            </div>
+            <div class="contact-card">
+                <a href="mailto:pro@clair.tools" class="contact-email">pro@clair.tools</a>
+                <span class="contact-desc">
+                    <span class="en">Pro user support</span>
+                    <span class="fr">Support utilisateurs Pro</span>
+                    <span class="es">Soporte usuarios Pro</span>
+                    <span class="pt">Suporte usu&aacute;rios Pro</span>
+                </span>
+            </div>
+            <div class="contact-card">
+                <a href="mailto:presse@clair.tools" class="contact-email">presse@clair.tools</a>
+                <span class="contact-desc">
+                    <span class="en">Press &amp; media</span>
+                    <span class="fr">Presse et m&eacute;dias</span>
+                    <span class="es">Prensa y medios</span>
+                    <span class="pt">Imprensa e m&iacute;dia</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════════════════════════════════ -->
+<footer>
+    <div class="container">
+        <p>
+            <span class="en">ClairTools &copy; 2026 &mdash; Simple tools, honestly made. &mdash; <a href="/privacy/">Privacy</a></span>
+            <span class="fr">ClairTools &copy; 2026 &mdash; Des outils simples, honn&ecirc;tement con&ccedil;us. &mdash; <a href="/privacy/">Confidentialit&eacute;</a></span>
+            <span class="es">ClairTools &copy; 2026 &mdash; Herramientas simples, hechas con honestidad. &mdash; <a href="/privacy/">Privacidad</a></span>
+            <span class="pt">ClairTools &copy; 2026 &mdash; Ferramentas simples, feitas com honestidade. &mdash; <a href="/privacy/">Privacidade</a></span>
+        </p>
+    </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SCRIPTS
+     ════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    'use strict';
+
+    /* ── Language ──────────────────────────────────────────────────── */
+    var langs = [
+        { code: 'en', flag: '\u{1F1EC}\u{1F1E7}' },
+        { code: 'fr', flag: '\u{1F1EB}\u{1F1F7}' },
+        { code: 'es', flag: '\u{1F1EA}\u{1F1F8}' },
+        { code: 'pt', flag: '\u{1F1E7}\u{1F1F7}' }
+    ];
+
+    function detectLang() {
+        var stored = localStorage.getItem('clair-lang');
+        if (stored && langs.some(function(l) { return l.code === stored; })) return stored;
+        var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        if (nav.indexOf('fr') === 0) return 'fr';
+        if (nav.indexOf('es') === 0) return 'es';
+        if (nav.indexOf('pt') === 0) return 'pt';
+        return 'en';
+    }
+
+    function setLang(code) {
+        document.documentElement.setAttribute('data-lang', code);
+        document.documentElement.setAttribute('lang', code);
+        localStorage.setItem('clair-lang', code);
+        var lang = langs.find(function(l) { return l.code === code; });
+        document.getElementById('lang-btn').textContent = lang ? lang.flag : langs[0].flag;
+    }
+
+    function cycleLang() {
+        var current = document.documentElement.getAttribute('data-lang') || 'en';
+        var idx = langs.findIndex(function(l) { return l.code === current; });
+        var next = (idx + 1) % langs.length;
+        setLang(langs[next].code);
+    }
+
+    setLang(detectLang());
+    document.getElementById('lang-btn').addEventListener('click', cycleLang);
+
+    /* ── Theme ─────────────────────────────────────────────────────── */
+    var themeBtn = document.getElementById('theme-btn');
+
+    function detectTheme() {
+        var stored = localStorage.getItem('clair-theme');
+        if (stored) return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function setTheme(t) {
+        if (t === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeBtn.textContent = '\u2600\uFE0F';
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1A1918');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            themeBtn.textContent = '\u{1F319}';
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1B7CC4');
+        }
+        localStorage.setItem('clair-theme', t);
+    }
+
+    function toggleTheme() {
+        var current = document.documentElement.hasAttribute('data-theme') ? 'light' : 'dark';
+        setTheme(current);
+    }
+
+    setTheme(detectTheme());
+    themeBtn.addEventListener('click', toggleTheme);
+})();
+</script>
+
+</body>
+</html>

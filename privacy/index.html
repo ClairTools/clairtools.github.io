@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — ClairTools</title>
+    <style>
+        :root {
+            --primary: #1B7CC4;
+            --text: #1A1918;
+            --bg: #FAFAF8;
+            --muted: #6E6D68;
+            --surface: #F6F5F2;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text: #EDECE8;
+                --bg: #1A1918;
+                --muted: #9F9E98;
+                --surface: #242320;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 2rem 1rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.5rem; color: var(--primary); }
+        p, ul { margin-bottom: 1rem; }
+        ul { padding-left: 1.5rem; }
+        li { margin-bottom: 0.4rem; }
+        .date { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+        a { color: var(--primary); }
+        .badge { display: inline-block; background: var(--surface); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.85rem; margin: 0.2rem; }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <p class="date">Effective: March 25, 2026</p>
+
+    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, and <strong>MoveProof</strong>.</p>
+
+    <h2>What we don't do</h2>
+    <ul>
+        <li><span class="badge">No ads</span> We never display ads. No ad SDKs. No ad tracking.</li>
+        <li><span class="badge">No accounts</span> We never require sign-up, login, or email.</li>
+        <li><span class="badge">No data selling</span> We never sell, share, or transfer your data to third parties.</li>
+        <li><span class="badge">No cloud uploads</span> Your files stay on your device unless you explicitly share them.</li>
+        <li><span class="badge">No tracking</span> We don't track your location, contacts, messages, or browsing.</li>
+    </ul>
+
+    <h2>What we collect</h2>
+
+    <h3 style="font-size:1rem; margin-top:1rem;">Prompter &amp; MoveProof (Firebase Analytics)</h3>
+    <ul>
+        <li><strong>Crash reports</strong> — via Firebase Crashlytics, to fix bugs. Contains device model, OS version, and stack trace. No personal data.</li>
+        <li><strong>Basic usage analytics</strong> — via Firebase Analytics with all ad-related consent <strong>denied</strong> (<code>adStorage=DENIED</code>, <code>adPersonalization=DENIED</code>, <code>adUserData=DENIED</code>). We see aggregate counts (e.g., "50 users opened settings"), never individual behavior.</li>
+        <li><strong>Firebase Installation ID</strong> — an anonymous device identifier used by Firebase. It is not an advertising ID and cannot identify you.</li>
+    </ul>
+
+    <h3 style="font-size:1rem; margin-top:1rem;">Vault</h3>
+    <ul>
+        <li><strong>No analytics. No Firebase. No crash reporting.</strong> Vault is intentionally offline-only. The only network permission is for in-app purchase processing via Google Play.</li>
+    </ul>
+
+    <h3 style="font-size:1rem; margin-top:1rem;">All apps (RevenueCat billing)</h3>
+    <ul>
+        <li><strong>Purchase history</strong> — processed by RevenueCat to manage one-time in-app purchases. RevenueCat receives a pseudonymous app user ID and purchase receipts from Google Play. No name, email, or payment details are sent to us.</li>
+    </ul>
+
+    <h2>Data storage</h2>
+    <ul>
+        <li>All user data (scripts, photos, notes, encrypted files) is stored <strong>locally on your device</strong>.</li>
+        <li>Vault files are encrypted with <strong>AES-256-GCM</strong> using keys stored in the Android Keystore. Even if someone accesses the raw files, they cannot read them without your PIN.</li>
+        <li>Backups are created as local ZIP files that you control. Nothing is uploaded.</li>
+    </ul>
+
+    <h2>Permissions</h2>
+    <ul>
+        <li><strong>Camera</strong> — Prompter: recording. MoveProof: inspection photos. Vault: importing photos.</li>
+        <li><strong>Microphone</strong> — Prompter: video recording audio. MoveProof: optional video notes.</li>
+        <li><strong>Location</strong> — MoveProof only: GPS coordinates on inspection photos (optional, for proof).</li>
+        <li><strong>Internet</strong> — Required for in-app purchases (RevenueCat/Google Play) and AI generation (Prompter/MoveProof, user-configured). Never used to upload your data.</li>
+        <li><strong>Bluetooth</strong> — Prompter only: remote control for teleprompter scrolling.</li>
+    </ul>
+
+    <h2>Your rights</h2>
+    <ul>
+        <li><strong>Access</strong> — All your data is on your device. You can see it anytime.</li>
+        <li><strong>Deletion</strong> — Delete any item in-app, or uninstall the app to remove everything.</li>
+        <li><strong>Portability</strong> — Use the backup/export feature to get your data as a ZIP file.</li>
+        <li><strong>No account = no server data</strong> — Since we don't collect personal data, there's nothing to request deletion of on our servers.</li>
+    </ul>
+
+    <h2>Children</h2>
+    <p>ClairTools apps are general-audience tools. We do not knowingly collect data from children under 13. Since we collect no personal data and require no accounts, there is no age-gated content.</p>
+
+    <h2>Changes</h2>
+    <p>If we change this policy, we'll update this page and the effective date above. Since we have no accounts or emails, we can't notify you directly — check this page periodically.</p>
+
+    <h2>Contact</h2>
+    <p>Questions? Email <a href="mailto:allo@clair.tools">allo@clair.tools</a></p>
+
+    <p style="margin-top:3rem; color:var(--muted); font-size:0.85rem;">
+        &copy; 2026 ClairTools &mdash; <a href="https://clair.tools">clair.tools</a>
+    </p>
+</body>
+</html>
