@@ -189,9 +189,6 @@
             transition: background 0.3s, border-color 0.3s;
         }
         .app-card:last-child { margin-bottom: 0; }
-        .app-card.reverse { grid-template-columns: 280px 1fr; }
-        .app-card.reverse .app-info { order: 2; }
-        .app-card.reverse .app-screenshot { order: 1; }
         .app-badge {
             display: inline-flex; align-items: center; gap: 8px;
             background: var(--primary-light); color: var(--primary);
@@ -239,9 +236,6 @@
             .app-card {
                 grid-template-columns: 1fr; padding: 32px 24px; gap: 32px;
             }
-            .app-card.reverse { grid-template-columns: 1fr; }
-            .app-card.reverse .app-info { order: 0; }
-            .app-card.reverse .app-screenshot { order: -1; }
             .app-screenshot { order: -1; }
             .phone-frame { width: 200px; }
         }
@@ -705,7 +699,7 @@
         </div>
 
         <!-- ── Vault ─────────────────────────────────────────────────── -->
-        <div class="app-card reverse">
+        <div class="app-card">
             <div class="app-info">
                 <div class="app-badge">
                     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
