@@ -191,11 +191,12 @@
         .app-card:last-child { margin-bottom: 0; }
         .app-badge {
             display: inline-flex; align-items: center; gap: 8px;
-            background: var(--primary-light); color: var(--primary);
+            background: var(--blue-50); color: var(--blue-600);
             padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;
             font-weight: 600; margin-bottom: 16px;
         }
-        .app-badge svg { width: 18px; height: 18px; }
+        [data-theme="dark"] .app-badge { background: var(--blue-900); color: var(--blue-200); }
+        .app-badge svg { width: 18px; height: 18px; stroke: currentColor; }
         .app-info h3 {
             font-size: 1.6rem; margin-bottom: 8px; letter-spacing: -0.02em;
         }
@@ -212,13 +213,15 @@
         .app-features li::before {
             content: '';
             display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-            background: var(--primary); flex-shrink: 0;
+            background: var(--blue-600); flex-shrink: 0;
         }
+        [data-theme="dark"] .app-features li::before { background: var(--blue-200); }
         .app-cta {
-            display: inline-block; background: var(--primary); color: #fff;
+            display: inline-block; background: var(--blue-600); color: #fff;
             padding: 12px 28px; border-radius: 12px; font-weight: 600;
             font-size: 0.95rem; transition: opacity 0.2s; text-decoration: none;
         }
+        [data-theme="dark"] .app-cta { background: var(--blue-200); color: var(--warm-charcoal); }
         .app-cta:hover { opacity: 0.88; text-decoration: none; }
 
         .app-screenshot { display: flex; justify-content: center; }
@@ -1097,10 +1100,10 @@
             <span class="pt">Fale com a gente</span>
         </h2>
         <p class="section-subtitle">
-            <span class="en">Real humans. Real emails. No bots.</span>
-            <span class="fr">De vrais humains. De vrais emails. Pas de bots.</span>
-            <span class="es">Humanos reales. Emails reales. Sin bots.</span>
-            <span class="pt">Humanos de verdade. Emails de verdade. Sem bots.</span>
+            <span class="en">Real humans. Real emails.</span>
+            <span class="fr">De vrais humains. De vrais emails.</span>
+            <span class="es">Humanos reales. Emails reales.</span>
+            <span class="pt">Humanos de verdade. Emails de verdade.</span>
         </p>
 
         <div class="contact-grid">
