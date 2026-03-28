@@ -90,6 +90,20 @@
             transition: border-color 0.2s, background 0.2s;
         }
         .nav-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        .lang-dropdown { position: relative; }
+        .lang-menu {
+            display: none; position: absolute; top: 100%; right: 0; margin-top: 6px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 6px; min-width: 160px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            z-index: 200;
+        }
+        .lang-menu.open { display: block; }
+        .lang-menu button {
+            display: block; width: 100%; text-align: left; padding: 8px 12px;
+            border: none; background: none; border-radius: 8px; cursor: pointer;
+            font-size: 0.9rem; color: var(--text-primary); transition: background 0.15s;
+        }
+        .lang-menu button:hover { background: var(--primary-light); }
         .nav-text-link { display: inline; }
 
         @media (max-width: 768px) {
@@ -210,9 +224,9 @@
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         .phone-frame img { width: 100%; height: auto; display: block; }
-        .screenshot-dark { display: none; }
-        [data-theme="dark"] .screenshot-light { display: none; }
-        [data-theme="dark"] .screenshot-dark { display: block; }
+        .phone-frame img.screenshot-dark { display: none; }
+        [data-theme="dark"] .phone-frame img.screenshot-light { display: none; }
+        [data-theme="dark"] .phone-frame img.screenshot-dark { display: block; }
 
         @media (max-width: 768px) {
             .app-card {
@@ -247,7 +261,10 @@
             padding: 4px 0; font-size: 0.88rem; color: var(--text-secondary);
             display: flex; align-items: flex-start; gap: 8px;
         }
-        .data-card ul li .data-icon { flex-shrink: 0; font-size: 0.85rem; }
+        .data-card ul li::before {
+            content: ''; display: inline-block; width: 6px; height: 6px;
+            border-radius: 50%; background: var(--secondary); flex-shrink: 0; margin-top: 8px;
+        }
         .data-card .data-note {
             font-size: 0.82rem; color: var(--text-muted); font-style: italic;
             border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;
@@ -349,7 +366,8 @@
     <div class="nav-inner">
         <a href="#" class="nav-brand">
             <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+                <defs><linearGradient id="navGrad" x1="5" y1="11" x2="39" y2="26"><stop offset="0%" stop-color="#89C4ED"/><stop offset="100%" stop-color="#1B7CC4"/></linearGradient></defs>
+                <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="url(#navGrad)" stroke-width="5" stroke-linecap="round"/>
             </svg>
             <span>ClairTools</span>
         </a>
@@ -378,7 +396,15 @@
                 <span class="es">Contacto</span>
                 <span class="pt">Contato</span>
             </a>
-            <button class="nav-btn" id="lang-btn" aria-label="Change language" title="Change language"></button>
+            <div class="lang-dropdown" id="lang-dropdown">
+                <button class="nav-btn" id="lang-btn" aria-label="Change language" title="Change language"></button>
+                <div class="lang-menu" id="lang-menu">
+                    <button data-lang-code="en">&#x1F1EC;&#x1F1E7; English</button>
+                    <button data-lang-code="fr">&#x1F1EB;&#x1F1F7; Fran&ccedil;ais</button>
+                    <button data-lang-code="es">&#x1F1EA;&#x1F1F8; Espa&ntilde;ol</button>
+                    <button data-lang-code="pt">&#x1F1E7;&#x1F1F7; Portugu&ecirc;s</button>
+                </div>
+            </div>
             <button class="nav-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle theme"></button>
         </div>
     </div>
@@ -391,7 +417,8 @@
     <div class="container">
         <div class="hero-logo">
             <svg width="80" height="80" viewBox="0 0 48 48" fill="none">
-                <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+                <defs><linearGradient id="heroGrad" x1="5" y1="11" x2="39" y2="26"><stop offset="0%" stop-color="#89C4ED"/><stop offset="100%" stop-color="#1B7CC4"/></linearGradient></defs>
+                <path d="M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15" stroke="url(#heroGrad)" stroke-width="5" stroke-linecap="round"/>
             </svg>
         </div>
         <h1>ClairTools</h1>
@@ -850,38 +877,29 @@
                 </span>
                 <ul>
                     <li>
-                        <span class="data-icon">&#x1F6E0;</span>
-                        <span>
-                            <span class="en">Firebase Crashlytics &mdash; crash reports</span>
-                            <span class="fr">Firebase Crashlytics &mdash; rapports de plantage</span>
-                            <span class="es">Firebase Crashlytics &mdash; informes de fallos</span>
-                            <span class="pt">Firebase Crashlytics &mdash; relat&oacute;rios de falhas</span>
-                        </span>
+                        <span class="en">Crash reporting helps us fix bugs fast (Firebase Crashlytics)</span>
+                        <span class="fr">Les rapports de plantage nous aident &agrave; corriger vite (Firebase Crashlytics)</span>
+                        <span class="es">Los informes de fallos nos ayudan a corregir r&aacute;pido (Firebase Crashlytics)</span>
+                        <span class="pt">Relat&oacute;rios de falhas nos ajudam a corrigir r&aacute;pido (Firebase Crashlytics)</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F4CA;</span>
-                        <span>
-                            <span class="en">Firebase Analytics &mdash; anonymous, ad tracking DENIED</span>
-                            <span class="fr">Firebase Analytics &mdash; anonyme, tra&ccedil;age pub REFUS&Eacute;</span>
-                            <span class="es">Firebase Analytics &mdash; an&oacute;nimo, rastreo de anuncios DENEGADO</span>
-                            <span class="pt">Firebase Analytics &mdash; an&ocirc;nimo, rastreamento de an&uacute;ncios NEGADO</span>
-                        </span>
+                        <span class="en">Anonymous usage stats help us improve (Firebase Analytics, ad consent denied)</span>
+                        <span class="fr">Stats anonymes pour am&eacute;liorer l&rsquo;appli (Firebase Analytics, consentement pub refus&eacute;)</span>
+                        <span class="es">Estad&iacute;sticas an&oacute;nimas para mejorar la app (Firebase Analytics, consentimiento de anuncios denegado)</span>
+                        <span class="pt">Estat&iacute;sticas an&ocirc;nimas para melhorar o app (Firebase Analytics, consentimento de an&uacute;ncios negado)</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F4B3;</span>
-                        <span>
-                            <span class="en">RevenueCat &mdash; purchase verification</span>
-                            <span class="fr">RevenueCat &mdash; v&eacute;rification des achats</span>
-                            <span class="es">RevenueCat &mdash; verificaci&oacute;n de compras</span>
-                            <span class="pt">RevenueCat &mdash; verifica&ccedil;&atilde;o de compras</span>
-                        </span>
+                        <span class="en">Purchase verification via RevenueCat</span>
+                        <span class="fr">V&eacute;rification des achats via RevenueCat</span>
+                        <span class="es">Verificaci&oacute;n de compras v&iacute;a RevenueCat</span>
+                        <span class="pt">Verifica&ccedil;&atilde;o de compras via RevenueCat</span>
                     </li>
                 </ul>
                 <p class="data-note">
-                    <span class="en">No accounts. No data sold.</span>
-                    <span class="fr">Pas de compte. Aucune donn&eacute;e vendue.</span>
-                    <span class="es">Sin cuentas. Ning&uacute;n dato vendido.</span>
-                    <span class="pt">Sem contas. Nenhum dado vendido.</span>
+                    <span class="en">Your scripts stay on your device. Always.</span>
+                    <span class="fr">Tes scripts restent sur ton appareil. Toujours.</span>
+                    <span class="es">Tus guiones se quedan en tu dispositivo. Siempre.</span>
+                    <span class="pt">Seus roteiros ficam no seu dispositivo. Sempre.</span>
                 </p>
             </div>
 
@@ -896,38 +914,29 @@
                 </span>
                 <ul>
                     <li>
-                        <span class="data-icon">&#x1F4B3;</span>
-                        <span>
-                            <span class="en">RevenueCat &mdash; purchase verification ONLY</span>
-                            <span class="fr">RevenueCat &mdash; v&eacute;rification des achats UNIQUEMENT</span>
-                            <span class="es">RevenueCat &mdash; SOLO verificaci&oacute;n de compras</span>
-                            <span class="pt">RevenueCat &mdash; APENAS verifica&ccedil;&atilde;o de compras</span>
-                        </span>
+                        <span class="en">Purchase verification via RevenueCat &mdash; the only internet use</span>
+                        <span class="fr">V&eacute;rification des achats via RevenueCat &mdash; le seul usage internet</span>
+                        <span class="es">Verificaci&oacute;n de compras v&iacute;a RevenueCat &mdash; el &uacute;nico uso de internet</span>
+                        <span class="pt">Verifica&ccedil;&atilde;o de compras via RevenueCat &mdash; o &uacute;nico uso de internet</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F6AB;</span>
-                        <span>
-                            <span class="en">Zero analytics. Zero Firebase.</span>
-                            <span class="fr">Z&eacute;ro analytics. Z&eacute;ro Firebase.</span>
-                            <span class="es">Cero analytics. Cero Firebase.</span>
-                            <span class="pt">Zero analytics. Zero Firebase.</span>
-                        </span>
+                        <span class="en">Completely offline otherwise &mdash; no analytics, no Firebase</span>
+                        <span class="fr">Compl&egrave;tement hors ligne sinon &mdash; aucun analytics, aucun Firebase</span>
+                        <span class="es">Completamente offline por lo dem&aacute;s &mdash; sin analytics, sin Firebase</span>
+                        <span class="pt">Completamente offline fora isso &mdash; sem analytics, sem Firebase</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F310;</span>
-                        <span>
-                            <span class="en">INTERNET permission is solely for purchase verification</span>
-                            <span class="fr">La permission INTERNET sert uniquement &agrave; v&eacute;rifier les achats</span>
-                            <span class="es">El permiso INTERNET es solo para verificaci&oacute;n de compras</span>
-                            <span class="pt">A permiss&atilde;o INTERNET &eacute; s&oacute; para verifica&ccedil;&atilde;o de compras</span>
-                        </span>
+                        <span class="en">Your files are AES-256 encrypted and stay on device</span>
+                        <span class="fr">Tes fichiers sont chiffr&eacute;s AES-256 et restent sur l&rsquo;appareil</span>
+                        <span class="es">Tus archivos est&aacute;n cifrados con AES-256 y se quedan en el dispositivo</span>
+                        <span class="pt">Seus arquivos s&atilde;o criptografados AES-256 e ficam no dispositivo</span>
                     </li>
                 </ul>
                 <p class="data-note">
-                    <span class="en">Most private app. Period.</span>
-                    <span class="fr">L&rsquo;app la plus priv&eacute;e. Point.</span>
-                    <span class="es">La app m&aacute;s privada. Punto.</span>
-                    <span class="pt">O app mais privado. Ponto.</span>
+                    <span class="en">Our most private app. By design.</span>
+                    <span class="fr">Notre app la plus priv&eacute;e. Par design.</span>
+                    <span class="es">Nuestra app m&aacute;s privada. Por dise&ntilde;o.</span>
+                    <span class="pt">Nosso app mais privado. Por design.</span>
                 </p>
             </div>
 
@@ -942,78 +951,66 @@
                 </span>
                 <ul>
                     <li>
-                        <span class="data-icon">&#x1F6E0;</span>
-                        <span>
-                            <span class="en">Firebase Crashlytics &mdash; crash reports</span>
-                            <span class="fr">Firebase Crashlytics &mdash; rapports de plantage</span>
-                            <span class="es">Firebase Crashlytics &mdash; informes de fallos</span>
-                            <span class="pt">Firebase Crashlytics &mdash; relat&oacute;rios de falhas</span>
-                        </span>
+                        <span class="en">Crash reporting helps us fix bugs fast (Firebase Crashlytics)</span>
+                        <span class="fr">Les rapports de plantage nous aident &agrave; corriger vite (Firebase Crashlytics)</span>
+                        <span class="es">Los informes de fallos nos ayudan a corregir r&aacute;pido (Firebase Crashlytics)</span>
+                        <span class="pt">Relat&oacute;rios de falhas nos ajudam a corrigir r&aacute;pido (Firebase Crashlytics)</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F4CA;</span>
-                        <span>
-                            <span class="en">Firebase Analytics &mdash; anonymous, ad tracking DENIED</span>
-                            <span class="fr">Firebase Analytics &mdash; anonyme, tra&ccedil;age pub REFUS&Eacute;</span>
-                            <span class="es">Firebase Analytics &mdash; an&oacute;nimo, rastreo de anuncios DENEGADO</span>
-                            <span class="pt">Firebase Analytics &mdash; an&ocirc;nimo, rastreamento de an&uacute;ncios NEGADO</span>
-                        </span>
+                        <span class="en">Anonymous usage stats help us improve (Firebase Analytics, ad consent denied)</span>
+                        <span class="fr">Stats anonymes pour am&eacute;liorer l&rsquo;appli (Firebase Analytics, consentement pub refus&eacute;)</span>
+                        <span class="es">Estad&iacute;sticas an&oacute;nimas para mejorar la app (Firebase Analytics, consentimiento de anuncios denegado)</span>
+                        <span class="pt">Estat&iacute;sticas an&ocirc;nimas para melhorar o app (Firebase Analytics, consentimento de an&uacute;ncios negado)</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F4B3;</span>
-                        <span>
-                            <span class="en">RevenueCat &mdash; purchase verification</span>
-                            <span class="fr">RevenueCat &mdash; v&eacute;rification des achats</span>
-                            <span class="es">RevenueCat &mdash; verificaci&oacute;n de compras</span>
-                            <span class="pt">RevenueCat &mdash; verifica&ccedil;&atilde;o de compras</span>
-                        </span>
+                        <span class="en">Purchase verification via RevenueCat</span>
+                        <span class="fr">V&eacute;rification des achats via RevenueCat</span>
+                        <span class="es">Verificaci&oacute;n de compras v&iacute;a RevenueCat</span>
+                        <span class="pt">Verifica&ccedil;&atilde;o de compras via RevenueCat</span>
                     </li>
                     <li>
-                        <span class="data-icon">&#x1F4CD;</span>
-                        <span>
-                            <span class="en">GPS used for photo overlay only &mdash; never uploaded</span>
-                            <span class="fr">GPS utilis&eacute; pour la superposition photo uniquement &mdash; jamais envoy&eacute;</span>
-                            <span class="es">GPS usado solo para la superposici&oacute;n en fotos &mdash; nunca enviado</span>
-                            <span class="pt">GPS usado s&oacute; para sobreposi&ccedil;&atilde;o na foto &mdash; nunca enviado</span>
-                        </span>
+                        <span class="en">GPS stays on your photos &mdash; used locally for timestamps only</span>
+                        <span class="fr">Le GPS reste sur tes photos &mdash; utilis&eacute; localement pour l&rsquo;horodatage</span>
+                        <span class="es">El GPS se queda en tus fotos &mdash; usado localmente solo para la marca de tiempo</span>
+                        <span class="pt">O GPS fica nas suas fotos &mdash; usado localmente s&oacute; para registro de data</span>
                     </li>
                 </ul>
                 <p class="data-note">
-                    <span class="en">No accounts. No data sold.</span>
-                    <span class="fr">Pas de compte. Aucune donn&eacute;e vendue.</span>
-                    <span class="es">Sin cuentas. Ning&uacute;n dato vendido.</span>
-                    <span class="pt">Sem contas. Nenhum dado vendido.</span>
+                    <span class="en">Your inspections stay on your device. Always.</span>
+                    <span class="fr">Tes inspections restent sur ton appareil. Toujours.</span>
+                    <span class="es">Tus inspecciones se quedan en tu dispositivo. Siempre.</span>
+                    <span class="pt">Suas inspe&ccedil;&otilde;es ficam no seu dispositivo. Sempre.</span>
                 </p>
             </div>
 
         </div>
 
-        <!-- NEVER list -->
+        <!-- Promise list (positive framing) -->
         <div class="data-never">
             <h4>
-                <span class="en">What we NEVER do</span>
-                <span class="fr">Ce qu&rsquo;on ne fait JAMAIS</span>
-                <span class="es">Lo que NUNCA hacemos</span>
-                <span class="pt">O que a gente NUNCA faz</span>
+                <span class="en">Our promise</span>
+                <span class="fr">Notre promesse</span>
+                <span class="es">Nuestra promesa</span>
+                <span class="pt">Nossa promessa</span>
             </h4>
             <ul class="data-never-list">
                 <li>
-                    <span class="en">Sell data</span>
-                    <span class="fr">Vendre des donn&eacute;es</span>
-                    <span class="es">Vender datos</span>
-                    <span class="pt">Vender dados</span>
+                    <span class="en">Your data stays yours</span>
+                    <span class="fr">Tes donn&eacute;es restent tiennes</span>
+                    <span class="es">Tus datos son tuyos</span>
+                    <span class="pt">Seus dados s&atilde;o seus</span>
                 </li>
                 <li>
-                    <span class="en">Show ads</span>
-                    <span class="fr">Afficher des pubs</span>
-                    <span class="es">Mostrar anuncios</span>
-                    <span class="pt">Mostrar an&uacute;ncios</span>
+                    <span class="en">Always ad-free</span>
+                    <span class="fr">Toujours sans pub</span>
+                    <span class="es">Siempre sin anuncios</span>
+                    <span class="pt">Sempre sem an&uacute;ncios</span>
                 </li>
                 <li>
-                    <span class="en">Track you</span>
-                    <span class="fr">Te tracer</span>
-                    <span class="es">Rastrearte</span>
-                    <span class="pt">Rastrear voc&ecirc;</span>
+                    <span class="en">Your privacy is respected</span>
+                    <span class="fr">Ta vie priv&eacute;e est respect&eacute;e</span>
+                    <span class="es">Tu privacidad es respetada</span>
+                    <span class="pt">Sua privacidade &eacute; respeitada</span>
                 </li>
                 <li>
                     <span class="en">Create accounts</span>
@@ -1022,10 +1019,16 @@
                     <span class="pt">Criar contas</span>
                 </li>
                 <li>
-                    <span class="en">Upload your files</span>
-                    <span class="fr">Envoyer tes fichiers</span>
-                    <span class="es">Subir tus archivos</span>
-                    <span class="pt">Enviar seus arquivos</span>
+                    <span class="en">No account required</span>
+                    <span class="fr">Aucun compte requis</span>
+                    <span class="es">Sin cuenta necesaria</span>
+                    <span class="pt">Sem conta necess&aacute;ria</span>
+                </li>
+                <li>
+                    <span class="en">Files stay on device</span>
+                    <span class="fr">Fichiers sur l&rsquo;appareil</span>
+                    <span class="es">Archivos en el dispositivo</span>
+                    <span class="pt">Arquivos no dispositivo</span>
                 </li>
             </ul>
         </div>
@@ -1185,15 +1188,24 @@
         document.getElementById('lang-btn').textContent = lang ? lang.flag : langs[0].flag;
     }
 
-    function cycleLang() {
-        var current = document.documentElement.getAttribute('data-lang') || 'en';
-        var idx = langs.findIndex(function(l) { return l.code === current; });
-        var next = (idx + 1) % langs.length;
-        setLang(langs[next].code);
-    }
+    var langMenu = document.getElementById('lang-menu');
+    var langBtn = document.getElementById('lang-btn');
+
+    langBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        langMenu.classList.toggle('open');
+    });
+
+    langMenu.querySelectorAll('button[data-lang-code]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            setLang(btn.getAttribute('data-lang-code'));
+            langMenu.classList.remove('open');
+        });
+    });
+
+    document.addEventListener('click', function() { langMenu.classList.remove('open'); });
 
     setLang(detectLang());
-    document.getElementById('lang-btn').addEventListener('click', cycleLang);
 
     /* ── Theme ─────────────────────────────────────────────────────── */
     var themeBtn = document.getElementById('theme-btn');
