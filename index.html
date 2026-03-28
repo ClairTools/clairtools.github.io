@@ -134,8 +134,14 @@
         }
         .manifesto-text strong { color: var(--text-primary); font-weight: 600; }
         .manifesto-text .signature {
-            margin-top: 32px; font-style: italic; color: var(--text-muted);
-            font-size: 1rem;
+            margin-top: 32px; font-size: 1rem;
+        }
+        .manifesto-text .sig-brand {
+            display: block; font-weight: 700; font-style: normal;
+            color: var(--primary); font-size: 1.1rem; margin-bottom: 4px;
+        }
+        .manifesto-text .sig-tagline {
+            display: block; font-style: italic; color: var(--text-muted);
         }
 
         /* ── Trust ─────────────────────────────────────────────────────── */
@@ -372,7 +378,7 @@
             <span>ClairTools</span>
         </a>
         <div class="nav-links">
-            <a href="#trust" class="nav-text-link">
+            <a href="#trust" class="nav-text-link" style="color:var(--secondary)">
                 <span class="en">Trust</span>
                 <span class="fr">Confiance</span>
                 <span class="es">Confianza</span>
@@ -448,7 +454,7 @@
             Honest, straightforward design.</p>
             <br>
             <p>Pay once for what you need. Use it forever.</p>
-            <p class="signature">&mdash; ClairTools / It&rsquo;s clear. That&rsquo;s all.</p>
+            <p class="signature"><span class="sig-brand">&mdash; ClairTools</span><span class="sig-tagline">It&rsquo;s clear. That&rsquo;s all.</span></p>
         </div>
 
         <!-- FR -->
@@ -462,7 +468,7 @@
             Un design honn&ecirc;te et direct.</p>
             <br>
             <p>Paie une fois pour ce dont tu as besoin. Utilise-le pour toujours.</p>
-            <p class="signature">&mdash; ClairTools / C&rsquo;est clair. C&rsquo;est tout.</p>
+            <p class="signature"><span class="sig-brand">&mdash; ClairTools</span><span class="sig-tagline">C&rsquo;est clair. C&rsquo;est tout.</span></p>
         </div>
 
         <!-- ES -->
@@ -476,7 +482,7 @@
             Dise&ntilde;o honesto y directo.</p>
             <br>
             <p>Paga una vez por lo que necesitas. &Uacute;salo para siempre.</p>
-            <p class="signature">&mdash; ClairTools / Est&aacute; claro. Eso es todo.</p>
+            <p class="signature"><span class="sig-brand">&mdash; ClairTools</span><span class="sig-tagline">Est&aacute; claro. Eso es todo.</span></p>
         </div>
 
         <!-- PT -->
@@ -490,7 +496,7 @@
             Design honesto e direto.</p>
             <br>
             <p>Pague uma vez pelo que voc&ecirc; precisa. Use para sempre.</p>
-            <p class="signature">&mdash; ClairTools / &Eacute; claro. S&oacute; isso.</p>
+            <p class="signature"><span class="sig-brand">&mdash; ClairTools</span><span class="sig-tagline">&Eacute; claro. S&oacute; isso.</span></p>
         </div>
 
     </div>
@@ -502,10 +508,10 @@
 <section class="trust" id="trust">
     <div class="container">
         <h2 class="section-title">
-            <span class="en">Built on trust</span>
-            <span class="fr">B&acirc;ti sur la confiance</span>
-            <span class="es">Construido con confianza</span>
-            <span class="pt">Constru&iacute;do com confian&ccedil;a</span>
+            <span class="en">Built on <span style="color:var(--secondary)">trust</span></span>
+            <span class="fr">B&acirc;ti sur la <span style="color:var(--secondary)">confiance</span></span>
+            <span class="es">Construido con <span style="color:var(--secondary)">confianza</span></span>
+            <span class="pt">Constru&iacute;do com <span style="color:var(--secondary)">confian&ccedil;a</span></span>
         </h2>
         <p class="section-subtitle">
             <span class="en">Four promises. No exceptions.</span>
