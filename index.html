@@ -390,13 +390,29 @@
             position: fixed; inset: 0; z-index: 1000;
             background: rgba(0, 0, 0, 0.92);
             display: none;
-            align-items: center; justify-content: center;
-            padding: 24px;
             cursor: zoom-out;
             animation: lightbox-fade 0.15s ease-out;
         }
-        .lightbox.open { display: flex; }
-        .lightbox img {
+        .lightbox.open { display: block; }
+        .lightbox-track {
+            width: 100%; height: 100%;
+            display: flex;
+            overflow-x: auto; overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain;
+        }
+        .lightbox-track::-webkit-scrollbar { display: none; }
+        .lightbox-slide {
+            flex: 0 0 100%; width: 100%; height: 100%;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px;
+        }
+        .lightbox-slide img {
             max-width: 100%; max-height: 100%;
             width: auto; height: auto;
             object-fit: contain;
@@ -404,6 +420,7 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
             user-select: none;
             -webkit-user-drag: none;
+            cursor: zoom-out;
         }
         @keyframes lightbox-fade {
             from { opacity: 0; }
@@ -960,7 +977,7 @@
      LIGHTBOX
      ════════════════════════════════════════════════════════════════════ -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged screenshot" aria-hidden="true">
-    <img alt="">
+    <div class="lightbox-track"></div>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════════
@@ -1121,22 +1138,52 @@
 
     /* ── Lightbox ──────────────────────────────────────────────────── */
     var lightbox = document.getElementById('lightbox');
-    var lightboxImg = lightbox.querySelector('img');
-    var lightboxState = { open: false, light: '', dark: '' };
+    var lightboxTrack = lightbox.querySelector('.lightbox-track');
+    var lightboxState = { open: false, lights: [], darks: [] };
 
     function isDarkTheme() {
         return document.documentElement.hasAttribute('data-theme');
     }
 
-    function openLightbox(lightSrc, darkSrc, alt) {
+    function buildLightboxSlides(carousel) {
+        var frames = carousel.querySelectorAll('.phone-frame');
+        lightboxState.lights = [];
+        lightboxState.darks = [];
+        // Wipe and rebuild track contents for the active app.
+        while (lightboxTrack.firstChild) lightboxTrack.removeChild(lightboxTrack.firstChild);
+        frames.forEach(function(frame) {
+            var l = frame.querySelector('img.screenshot-light');
+            var d = frame.querySelector('img.screenshot-dark');
+            if (!l || !d) return;
+            lightboxState.lights.push(l.src);
+            lightboxState.darks.push(d.src);
+            var slide = document.createElement('div');
+            slide.className = 'lightbox-slide';
+            var img = document.createElement('img');
+            img.src = isDarkTheme() ? d.src : l.src;
+            img.alt = l.alt || '';
+            slide.appendChild(img);
+            lightboxTrack.appendChild(slide);
+        });
+    }
+
+    function openLightbox(carousel, startIndex) {
+        buildLightboxSlides(carousel);
         lightboxState.open = true;
-        lightboxState.light = lightSrc;
-        lightboxState.dark = darkSrc;
-        lightboxImg.src = isDarkTheme() ? darkSrc : lightSrc;
-        lightboxImg.alt = alt || '';
         lightbox.classList.add('open');
         lightbox.setAttribute('aria-hidden', 'false');
         document.body.classList.add('lightbox-open');
+        // Jump to the tapped slide without a smooth-scroll animation, then
+        // restore smooth-scroll for subsequent swipe navigation.
+        requestAnimationFrame(function() {
+            var prevBehavior = lightboxTrack.style.scrollBehavior;
+            lightboxTrack.style.scrollBehavior = 'auto';
+            lightboxTrack.scrollLeft = startIndex * lightboxTrack.clientWidth;
+            // Restore in the next frame so the jump isn't animated.
+            requestAnimationFrame(function() {
+                lightboxTrack.style.scrollBehavior = prevBehavior || '';
+            });
+        });
     }
 
     function closeLightbox() {
@@ -1145,25 +1192,47 @@
         lightbox.classList.remove('open');
         lightbox.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('lightbox-open');
-        // Don't blank the src — the fade-out shows the image one last frame
-        // and clearing src would briefly show a broken-image icon.
     }
 
-    lightbox.addEventListener('click', closeLightbox);
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && lightboxState.open) closeLightbox();
+    // Tap-to-close: only fire when the gesture wasn't a swipe.
+    var lbStartX = 0, lbStartY = 0, lbMoved = false;
+    lightbox.addEventListener('pointerdown', function(e) {
+        lbStartX = e.clientX; lbStartY = e.clientY; lbMoved = false;
+    });
+    lightbox.addEventListener('pointermove', function(e) {
+        if (Math.hypot(e.clientX - lbStartX, e.clientY - lbStartY) > 8) lbMoved = true;
+    });
+    lightbox.addEventListener('click', function() {
+        if (!lbMoved) closeLightbox();
     });
 
-    // Keep lightbox image in sync if the user toggles theme while it's open.
-    // Re-resolve the right variant from the cached pair.
+    document.addEventListener('keydown', function(e) {
+        if (!lightboxState.open) return;
+        if (e.key === 'Escape') { closeLightbox(); return; }
+        // Desktop arrow-key navigation between lightbox slides.
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            var w = lightboxTrack.clientWidth;
+            var idx = Math.round(lightboxTrack.scrollLeft / w);
+            var next = e.key === 'ArrowRight' ? idx + 1 : idx - 1;
+            var max = lightboxTrack.children.length - 1;
+            next = Math.max(0, Math.min(max, next));
+            lightboxTrack.scrollTo({ left: next * w, behavior: 'smooth' });
+        }
+    });
+
+    // Swap all slide srcs if the user toggles theme while the lightbox is open.
     var themeObserver = new MutationObserver(function() {
         if (!lightboxState.open) return;
-        lightboxImg.src = isDarkTheme() ? lightboxState.dark : lightboxState.light;
+        var imgs = lightboxTrack.querySelectorAll('img');
+        imgs.forEach(function(img, i) {
+            img.src = isDarkTheme() ? lightboxState.darks[i] : lightboxState.lights[i];
+        });
     });
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-    // Tap-to-open on every phone-frame. Distinguish a tap from a swipe by
-    // tracking pointer movement — only fire if the user didn't drag.
+    // Tap-to-open on every phone-frame. Distinguish a tap from a swipe in
+    // the small carousel so swiping doesn't accidentally open the lightbox.
     document.querySelectorAll('.phone-frame').forEach(function(frame) {
         var startX = 0, startY = 0, moved = false;
         frame.addEventListener('pointerdown', function(e) {
@@ -1174,11 +1243,12 @@
         });
         frame.addEventListener('click', function(e) {
             if (moved) return;
-            var light = frame.querySelector('img.screenshot-light');
-            var dark  = frame.querySelector('img.screenshot-dark');
-            if (!light || !dark) return;
+            var carousel = frame.closest('.phone-carousel');
+            if (!carousel) return;
+            var siblings = Array.prototype.slice.call(carousel.querySelectorAll('.phone-frame'));
+            var idx = siblings.indexOf(frame);
             e.stopPropagation();
-            openLightbox(light.src, dark.src, light.alt);
+            openLightbox(carousel, idx);
         });
         // Keyboard activation: Enter or Space.
         frame.setAttribute('tabindex', '0');
@@ -1186,9 +1256,10 @@
         frame.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                var light = frame.querySelector('img.screenshot-light');
-                var dark  = frame.querySelector('img.screenshot-dark');
-                if (light && dark) openLightbox(light.src, dark.src, light.alt);
+                var carousel = frame.closest('.phone-carousel');
+                if (!carousel) return;
+                var siblings = Array.prototype.slice.call(carousel.querySelectorAll('.phone-frame'));
+                openLightbox(carousel, siblings.indexOf(frame));
             }
         });
     });
