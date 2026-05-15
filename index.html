@@ -83,13 +83,18 @@
             font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;
             transition: color 0.2s;
         }
-        .nav-links a:hover { color: var(--primary); text-decoration: none; }
+        @media (hover: hover) {
+            .nav-links a:hover { color: var(--primary); text-decoration: none; }
+        }
         .nav-btn {
             background: none; border: 1px solid var(--border); border-radius: 8px;
             padding: 6px 10px; cursor: pointer; font-size: 1rem; color: var(--text-primary);
             transition: border-color 0.2s, background 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .nav-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        @media (hover: hover) {
+            .nav-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        }
         .lang-dropdown { position: relative; }
         .lang-menu {
             display: none; position: absolute; top: 100%; right: 0; margin-top: 6px;
@@ -239,7 +244,9 @@
             display: inline-flex; align-items: center; justify-content: center;
             transition: border-color 0.2s, background 0.2s, opacity 0.2s, transform 0.1s;
         }
-        .carousel-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        @media (hover: hover) {
+            .carousel-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        }
         .carousel-btn:active { transform: scale(0.92); }
         .carousel-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
         .carousel-btn:disabled { opacity: 0.35; cursor: default; }
@@ -996,7 +1003,11 @@
     }
 
     setTheme(detectTheme());
-    themeBtn.addEventListener('click', toggleTheme);
+    themeBtn.addEventListener('click', function() {
+        toggleTheme();
+        // Drop focus so the button stops painting a hover/focus highlight after the tap.
+        themeBtn.blur();
+    });
 
     /* ── Carousel ──────────────────────────────────────────────────── */
     document.querySelectorAll('.app-screenshot').forEach(function(root) {
