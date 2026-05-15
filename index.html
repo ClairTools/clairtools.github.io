@@ -231,6 +231,7 @@
             transition: box-shadow 0.3s;
             scroll-snap-align: start;
             scroll-snap-stop: always;
+            cursor: zoom-in;
         }
         .phone-frame img { width: 100%; height: auto; display: block; }
         .phone-frame img.screenshot-dark { display: none; }
@@ -383,6 +384,32 @@
         @media (max-width: 480px) {
             .contact-grid { grid-template-columns: 1fr; }
         }
+
+        /* ── Lightbox ─────────────────────────────────────────────────── */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.92);
+            display: none;
+            align-items: center; justify-content: center;
+            padding: 24px;
+            cursor: zoom-out;
+            animation: lightbox-fade 0.15s ease-out;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 100%; max-height: 100%;
+            width: auto; height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        @keyframes lightbox-fade {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        body.lightbox-open { overflow: hidden; }
 
         /* ── Footer ────────────────────────────────────────────────────── */
         footer {
@@ -930,6 +957,13 @@
 </footer>
 
 <!-- ════════════════════════════════════════════════════════════════════
+     LIGHTBOX
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged screenshot" aria-hidden="true">
+    <img alt="">
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
      SCRIPTS
      ════════════════════════════════════════════════════════════════════ -->
 <script>
@@ -1083,6 +1117,80 @@
         // Initial state
         syncControls();
         window.addEventListener('resize', syncControls);
+    });
+
+    /* ── Lightbox ──────────────────────────────────────────────────── */
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = lightbox.querySelector('img');
+    var lightboxState = { open: false, light: '', dark: '' };
+
+    function isDarkTheme() {
+        return document.documentElement.hasAttribute('data-theme');
+    }
+
+    function openLightbox(lightSrc, darkSrc, alt) {
+        lightboxState.open = true;
+        lightboxState.light = lightSrc;
+        lightboxState.dark = darkSrc;
+        lightboxImg.src = isDarkTheme() ? darkSrc : lightSrc;
+        lightboxImg.alt = alt || '';
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lightbox-open');
+    }
+
+    function closeLightbox() {
+        if (!lightboxState.open) return;
+        lightboxState.open = false;
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lightbox-open');
+        // Don't blank the src — the fade-out shows the image one last frame
+        // and clearing src would briefly show a broken-image icon.
+    }
+
+    lightbox.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lightboxState.open) closeLightbox();
+    });
+
+    // Keep lightbox image in sync if the user toggles theme while it's open.
+    // Re-resolve the right variant from the cached pair.
+    var themeObserver = new MutationObserver(function() {
+        if (!lightboxState.open) return;
+        lightboxImg.src = isDarkTheme() ? lightboxState.dark : lightboxState.light;
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    // Tap-to-open on every phone-frame. Distinguish a tap from a swipe by
+    // tracking pointer movement — only fire if the user didn't drag.
+    document.querySelectorAll('.phone-frame').forEach(function(frame) {
+        var startX = 0, startY = 0, moved = false;
+        frame.addEventListener('pointerdown', function(e) {
+            startX = e.clientX; startY = e.clientY; moved = false;
+        });
+        frame.addEventListener('pointermove', function(e) {
+            if (Math.hypot(e.clientX - startX, e.clientY - startY) > 8) moved = true;
+        });
+        frame.addEventListener('click', function(e) {
+            if (moved) return;
+            var light = frame.querySelector('img.screenshot-light');
+            var dark  = frame.querySelector('img.screenshot-dark');
+            if (!light || !dark) return;
+            e.stopPropagation();
+            openLightbox(light.src, dark.src, light.alt);
+        });
+        // Keyboard activation: Enter or Space.
+        frame.setAttribute('tabindex', '0');
+        frame.setAttribute('role', 'button');
+        frame.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                var light = frame.querySelector('img.screenshot-light');
+                var dark  = frame.querySelector('img.screenshot-dark');
+                if (light && dark) openLightbox(light.src, dark.src, light.alt);
+            }
+        });
     });
 })();
 </script>
