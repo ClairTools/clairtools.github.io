@@ -259,8 +259,11 @@
                 grid-template-columns: 1fr; padding: 32px 24px; gap: 32px;
             }
             .app-screenshot { order: -1; }
-            .phone-carousel { max-width: 100%; }
-            .phone-frame { flex-basis: 200px; width: 200px; }
+            /* Keep the carousel narrow on mobile so only one phone fits at a time —
+               otherwise the 3×200px + gaps row fits inside viewports between ~632px
+               and 768px and the carousel stops looking like a carousel. */
+            .phone-carousel { max-width: 220px; }
+            .phone-frame { flex: 0 0 200px; width: 200px; }
         }
 
         /* ── Privacy (collapsed) ──────────────────────────────────────── */
