@@ -13,16 +13,16 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='5' y1='24' x2='39' y2='24' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%231B7CC4'/%3E%3Cstop offset='100%25' stop-color='%2389C4ED'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M13 11C7.8 14.2 5 20 5 26c0 9.4 7.6 17 17 17s17-7.6 17-17c0-6-2.8-11.8-8-15' stroke='url(%23g)' stroke-width='5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
     <link rel="canonical" href="https://clair.tools">
 
-    <!-- ── Plus Jakarta Sans ──────────────────────────────────────────── -->
+    <!-- —— Plus Jakarta Sans ──────────────────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ── Reset ──────────────────────────────────────────────────── */
+        /* —— Reset ──────────────────────────────────────────────────── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ── Tokens · ClairTools brand palette ─────────────────────────── */
+        /* —— Tokens · ClairTools brand palette ─────────────────────────── */
         :root {
             /* CLAIR BLUE — primary actions, links, focus */
             --blue-50:#E8F4FD;
@@ -51,8 +51,11 @@
             --gray-800:#47463F;
             --gray-900:#2A2925;
 
+            /* CLAIR CREAM — page wash (warm, low chroma) */
+            --cream:#F1ECE0;
+
             /* Semantic — Light */
-            --bg:var(--gray-50);
+            --bg:var(--cream);
             --surface:#FFFFFF;
             --surface-muted:var(--gray-50);
             --border:var(--gray-100);
@@ -101,7 +104,7 @@
             --trust-strong:var(--green-100);
         }
 
-        /* ── Language system ───────────────────────────────────────────── */
+        /* —— Language system ───────────────────────────────────────────── */
         [data-lang] .en, [data-lang] .fr, [data-lang] .es, [data-lang] .pt { display: none !important; }
         [data-lang="en"] .en, [data-lang="fr"] .fr, [data-lang="es"] .es, [data-lang="pt"] .pt { display: inline !important; }
         [data-lang] .en-block, [data-lang] .fr-block, [data-lang] .es-block, [data-lang] .pt-block { display: none !important; }
@@ -111,7 +114,7 @@
         [data-lang] .en-grid, [data-lang] .fr-grid, [data-lang] .es-grid, [data-lang] .pt-grid { display: none !important; }
         [data-lang="en"] .en-grid, [data-lang="fr"] .fr-grid, [data-lang="es"] .es-grid, [data-lang="pt"] .pt-grid { display: grid !important; }
 
-        /* ── Base ─────────────────────────────────────────────────────── */
+        /* —— Base ─────────────────────────────────────────────────────── */
         html { scroll-behavior: smooth; }
         body {
             font-family: var(--font);
@@ -128,7 +131,7 @@
         a { color: var(--accent); text-decoration: none; }
         a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-        /* ── Layout ───────────────────────────────────────────────────── */
+        /* —— Layout ───────────────────────────────────────────────────── */
         .container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
         section { padding: 96px 0; }
 
@@ -155,15 +158,16 @@
         }
         .section-head { margin-bottom: 56px; }
 
-        /* ── Nav ──────────────────────────────────────────────────────── */
+        /* —— Nav ──────────────────────────────────────────────────────── */
         nav {
             position: sticky; top: 0; z-index: 100;
             background: color-mix(in oklab, var(--bg) 88%, transparent);
             backdrop-filter: saturate(140%) blur(10px);
             -webkit-backdrop-filter: saturate(140%) blur(10px);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-strong);
             transition: background 0.3s ease, border-color 0.3s ease;
         }
+        [data-theme="dark"] nav { border-bottom-color: var(--border); }
         .nav-inner {
             display: flex; align-items: center; justify-content: space-between;
             max-width: 1120px; margin: 0 auto; padding: 14px 28px;
@@ -236,7 +240,7 @@
             .nav-text-link, .nav-divider { display: none; }
         }
 
-        /* ── Hero ─────────────────────────────────────────────────────── */
+        /* —— Hero ─────────────────────────────────────────────────────── */
         .hero { padding: 110px 0 70px; text-align: center; }
         .hero-logo {
             display: inline-flex;
@@ -264,7 +268,7 @@
             display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center;
         }
 
-        /* ── Buttons ──────────────────────────────────────────────────── */
+        /* —— Buttons ──────────────────────────────────────────────────── */
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
             gap: 8px;
@@ -287,34 +291,41 @@
         .btn-primary:hover { background: var(--accent-strong); color: var(--accent-on); }
         [data-theme="dark"] .btn-primary:hover { background: var(--blue-100); }
         .btn-secondary {
-            background: transparent;
+            background: var(--surface);
             color: var(--text);
             border-color: var(--border-strong);
         }
         .btn-secondary:hover { background: var(--surface-muted); }
+        [data-theme="dark"] .btn-secondary { background: var(--surface); }
+        [data-theme="dark"] .btn-secondary:hover { background: var(--surface-muted); }
         .btn svg { width: 16px; height: 16px; }
 
-        /* ── Trust ────────────────────────────────────────────────────── */
+        /* —— Trust ────────────────────────────────────────────────────── */
         .trust-grid {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
         }
         .trust-card {
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-strong);
             border-radius: var(--r-lg);
             padding: 32px 28px;
+            box-shadow:
+                0 1px 2px rgba(40,38,32,0.03),
+                0 4px 12px -8px rgba(40,38,32,0.06);
             transition: border-color 0.2s ease;
+        }
+        [data-theme="dark"] .trust-card {
+            border-color: var(--border);
+            box-shadow: none;
         }
         .trust-card:hover { border-color: var(--border-strong); }
         .trust-icon {
             width: 36px; height: 36px;
-            display: inline-flex; align-items: center; justify-content: center;
-            border-radius: var(--r-sm);
-            background: var(--trust-soft);
+            display: inline-flex; align-items: center; justify-content: flex-start;
             color: var(--trust);
             margin-bottom: 22px;
         }
-        .trust-icon svg { width: 18px; height: 18px; }
+        .trust-icon svg { width: 24px; height: 24px; }
         .trust-card h3 {
             font-size: 1.02rem; font-weight: 600;
             margin-bottom: 8px;
@@ -332,19 +343,47 @@
             .trust-grid { grid-template-columns: 1fr; }
         }
 
-        /* ── Apps ─────────────────────────────────────────────────────── */
+        /* —— Apps ─────────────────────────────────────────────────────── */
         .apps { padding: 40px 0 96px; }
+        .apps-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
         .app-card {
-            display: grid; grid-template-columns: 1fr 280px; gap: 64px;
+            display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 56px;
             align-items: center;
-            padding: 56px 0;
-            border-top: 1px solid var(--border);
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-xl);
+            padding: 48px 52px;
+            box-shadow:
+                0 1px 2px rgba(40,38,32,0.03),
+                0 6px 16px -10px rgba(40,38,32,0.06);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        [data-theme="dark"] .app-card {
+            border-color: var(--border);
+            box-shadow: none;
+        }
+        @media (hover: hover) {
+            .app-card:hover {
+                border-color: var(--border-strong);
+                box-shadow:
+                    0 1px 2px rgba(40,38,32,0.04),
+                    0 10px 24px -14px rgba(40,38,32,0.10);
+            }
+            [data-theme="dark"] .app-card:hover {
+                box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 18px 40px -18px rgba(0,0,0,0.5);
+            }
         }
         .app-card:nth-of-type(even) {
-            grid-template-columns: 280px 1fr;
+            grid-template-columns: 280px minmax(0, 1fr);
         }
         .app-card:nth-of-type(even) .app-screenshot { order: -1; }
 
+        .app-info { min-width: 0; }
+        .app-info > * { overflow-wrap: anywhere; word-break: break-word; }
         .app-eyebrow {
             font-size: 0.78rem;
             font-weight: 600;
@@ -354,22 +393,32 @@
             margin-bottom: 12px;
         }
         .app-info h3 {
-            font-size: clamp(1.75rem, 2.6vw, 2.2rem);
+            font-size: clamp(1.6rem, 2.6vw, 2.2rem);
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             letter-spacing: -0.03em;
+            text-wrap: balance;
         }
         .app-tagline {
-            font-size: 1.08rem;
+            font-size: clamp(1rem, 1.4vw, 1.08rem);
             color: var(--text-muted);
-            margin-bottom: 28px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
             max-width: 480px;
+            text-wrap: pretty;
+            border-bottom: 1px solid var(--border);
+        }
+        .app-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 0 24px;
+            border: 0;
         }
         .app-features {
             list-style: none;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px 24px;
+            gap: 10px 28px;
             margin-bottom: 32px;
             max-width: 560px;
         }
@@ -380,6 +429,10 @@
             align-items: flex-start;
             gap: 10px;
             line-height: 1.45;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .app-features li::before {
             content: '';
@@ -474,23 +527,44 @@
             .app-card,
             .app-card:nth-of-type(even) {
                 grid-template-columns: 1fr;
-                gap: 36px;
-                padding: 48px 0;
+                gap: 32px;
+                padding: 36px 32px;
             }
             .app-card:nth-of-type(even) .app-screenshot { order: -1; }
             .app-card .app-screenshot { order: -1; }
-            .app-features { grid-template-columns: 1fr; }
+            .app-features { grid-template-columns: 1fr; gap: 8px; }
             .phone-carousel { width: 220px; }
             .phone-frame { flex: 0 0 220px; width: 220px; }
         }
+        @media (max-width: 520px) {
+            .apps-stack { gap: 20px; }
+            .app-card,
+            .app-card:nth-of-type(even) {
+                padding: 28px 22px;
+                gap: 28px;
+                border-radius: var(--r-lg);
+            }
+            .app-info h3 { font-size: 1.5rem; }
+            .app-tagline { font-size: 0.98rem; margin-bottom: 20px; }
+            .app-features li { font-size: 0.9rem; }
+            .phone-carousel { width: 200px; }
+            .phone-frame { flex: 0 0 200px; width: 200px; max-height: 440px; }
+        }
 
-        /* ── Privacy / Data ──────────────────────────────────────────── */
+        /* —— Privacy / Data ──────────────────────────────────────────── */
         .privacy-block {
             max-width: 760px;
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-strong);
             border-radius: var(--r-lg);
+            box-shadow:
+                0 1px 2px rgba(40,38,32,0.03),
+                0 4px 12px -8px rgba(40,38,32,0.06);
             overflow: hidden;
+        }
+        [data-theme="dark"] .privacy-block {
+            border-color: var(--border);
+            box-shadow: none;
         }
         .privacy-details summary {
             list-style: none; cursor: pointer;
@@ -521,13 +595,20 @@
         }
         .privacy-body a { color: var(--accent); font-weight: 500; }
 
-        /* ── Contact ──────────────────────────────────────────────────── */
+        /* —— Contact ──────────────────────────────────────────────────── */
         .contact-block {
             text-align: center;
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-strong);
             border-radius: var(--r-xl);
             padding: 64px 32px;
+            box-shadow:
+                0 1px 2px rgba(40,38,32,0.03),
+                0 6px 16px -10px rgba(40,38,32,0.06);
+        }
+        [data-theme="dark"] .contact-block {
+            border-color: var(--border);
+            box-shadow: none;
         }
         .contact-block .eyebrow { color: var(--accent); }
         .contact-block h2 {
@@ -558,7 +639,7 @@
         }
         [data-theme="dark"] .contact-email-link:hover { color: var(--accent); }
 
-        /* ── Lightbox ────────────────────────────────────────────────── */
+        /* —— Lightbox ────────────────────────────────────────────────── */
         .lightbox {
             position: fixed; inset: 0; z-index: 1000;
             background: rgba(10, 10, 12, 0.94);
@@ -600,7 +681,7 @@
         }
         body.lightbox-open { overflow: hidden; }
 
-        /* ── Footer ───────────────────────────────────────────────────── */
+        /* —— Footer ───────────────────────────────────────────────────── */
         footer {
             border-top: 1px solid var(--border);
             padding: 36px 0;
@@ -618,15 +699,24 @@
         .footer-inner a:hover { color: var(--text); }
         .footer-links { display: flex; gap: 20px; align-items: center; }
 
-        /* ── Responsive caps ──────────────────────────────────────────── */
+        /* —— Responsive caps ──────────────────────────────────────────── */
         @media (max-width: 768px) {
             section { padding: 72px 0; }
+            .apps { padding: 24px 0 72px; }
             .hero { padding: 80px 0 56px; }
             .container { padding: 0 20px; }
             .section-head { margin-bottom: 40px; }
-            .section-lede { margin-bottom: 0; }
+            .section-title { text-wrap: balance; }
+            .section-lede { margin-bottom: 0; text-wrap: pretty; }
             .contact-block { padding: 48px 24px; }
             .footer-inner { flex-direction: column; text-align: center; }
+        }
+        @media (max-width: 420px) {
+            .container { padding: 0 16px; }
+            .hero h1 { letter-spacing: -0.035em; }
+            .hero-lede { font-size: 1rem; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .hero-actions .btn { width: 100%; }
         }
     </style>
 </head>
@@ -769,77 +859,79 @@
             </p>
         </div>
 
-        <!-- ── Prompter ────────────────────────────────────────────────── -->
+        <div class="apps-stack">
+
+        <!-- —— MoveProof ───────────────────────────────────────────────── -->
         <div class="app-card">
             <div class="app-info">
                 <div class="app-eyebrow">
-                    <span class="en">For creators</span>
-                    <span class="fr">Pour les créateurs</span>
-                    <span class="es">Para creadores</span>
-                    <span class="pt">Para criadores</span>
+                    <span class="en">For tenancy</span>
+                    <span class="fr">Pour la location</span>
+                    <span class="es">Para alquileres</span>
+                    <span class="pt">Para locações</span>
                 </div>
-                <h3>Prompter</h3>
+                <h3>MoveProof</h3>
                 <p class="app-tagline">
-                    <span class="en">Teleprompter, recorder, floating overlay.</span>
-                    <span class="fr">Téléprompteur, enregistreur, overlay flottant.</span>
-                    <span class="es">Teleprompter, grabadora, overlay flotante.</span>
-                    <span class="pt">Teleprompter, gravador, overlay flutuante.</span>
+                    <span class="en">Move-in / move-out inspections, on paper-quality PDFs.</span>
+                    <span class="fr">�tats des lieux d&rsquo;entrée et de sortie, en PDF.</span>
+                    <span class="es">Inspecciones de entrada y salida, en PDF.</span>
+                    <span class="pt">Vistorias de entrada e saída, em PDF.</span>
                 </p>
 
                 <ul class="app-features en-grid">
-                    <li>Smooth-scrolling teleprompter with mirror mode</li>
-                    <li>Camera recorder with on-screen script</li>
-                    <li>Floating overlay over any app</li>
-                    <li>Bluetooth remote control</li>
-                    <li>Gaze correction while recording</li>
-                    <li>AI script generation &amp; templates</li>
+                    <li>Room-by-room checklist with photos &amp; voice notes</li>
+                    <li>Burned-in date, GPS &amp; compass on every photo</li>
+                    <li>SHA-256 page fingerprint on the PDF</li>
+                    <li>Bitcoin-anchored timestamp (OpenTimestamps)</li>
+                    <li>Move-in / move-out linked reports</li>
+                    <li>AR room measurement</li>
                 </ul>
                 <ul class="app-features fr-grid">
-                    <li>Téléprompteur fluide avec mode miroir</li>
-                    <li>Enregistreur caméra avec texte à l&rsquo;écran</li>
-                    <li>Overlay flottant par-dessus n&rsquo;importe quelle app</li>
-                    <li>Télécommande Bluetooth</li>
-                    <li>Correction du regard pendant l&rsquo;enregistrement</li>
-                    <li>Génération de scripts IA et modèles</li>
+                    <li>Checklist pièce par pièce avec photos et notes vocales</li>
+                    <li>Date, GPS et boussole incrustés sur chaque photo</li>
+                    <li>Empreinte SHA-256 sur chaque page du PDF</li>
+                    <li>Horodatage ancré sur Bitcoin (OpenTimestamps)</li>
+                    <li>Rapports d&rsquo;entrée et de sortie liés</li>
+                    <li>Mesure de pièce en réalité augmentée</li>
                 </ul>
                 <ul class="app-features es-grid">
-                    <li>Teleprompter fluido con modo espejo</li>
-                    <li>Grabadora con guión en pantalla</li>
-                    <li>Overlay flotante sobre cualquier app</li>
-                    <li>Mando a distancia Bluetooth</li>
-                    <li>Corrección de mirada al grabar</li>
-                    <li>Generación de guiones con IA y plantillas</li>
+                    <li>Lista habitación por habitación con fotos y voz</li>
+                    <li>Fecha, GPS y brújula incrustados en cada foto</li>
+                    <li>Huella SHA-256 en cada página del PDF</li>
+                    <li>Sello de tiempo en Bitcoin (OpenTimestamps)</li>
+                    <li>Informes de entrada y salida vinculados</li>
+                    <li>Medición con realidad aumentada</li>
                 </ul>
                 <ul class="app-features pt-grid">
-                    <li>Teleprompter com rolagem suave e modo espelho</li>
-                    <li>Gravador com roteiro na tela</li>
-                    <li>Overlay flutuante sobre qualquer app</li>
-                    <li>Controle remoto Bluetooth</li>
-                    <li>Correção de olhar durante a gravação</li>
-                    <li>Geração de roteiros com IA e modelos</li>
+                    <li>Checklist cômodo por cômodo com fotos e voz</li>
+                    <li>Data, GPS e bússola gravados em cada foto</li>
+                    <li>Impressão SHA-256 em cada página do PDF</li>
+                    <li>Carimbo de tempo em Bitcoin (OpenTimestamps)</li>
+                    <li>Relatórios de entrada e saída vinculados</li>
+                    <li>Medição com realidade aumentada</li>
                 </ul>
 
-                <a href="https://play.google.com/store/apps/details?id=com.clairtools.prompter" class="btn btn-primary">
-                    <span class="en">Get Prompter</span>
-                    <span class="fr">Télécharger Prompter</span>
-                    <span class="es">Descargar Prompter</span>
-                    <span class="pt">Baixar Prompter</span>
+                <a href="https://play.google.com/store/apps/details?id=com.clairtools.moveproof" class="btn btn-primary">
+                    <span class="en">Get MoveProof</span>
+                    <span class="fr">Télécharger MoveProof</span>
+                    <span class="es">Descargar MoveProof</span>
+                    <span class="pt">Baixar MoveProof</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
             </div>
             <div class="app-screenshot">
-                <div class="phone-carousel" aria-label="Prompter screenshots">
+                <div class="phone-carousel" aria-label="MoveProof screenshots">
                     <div class="phone-frame">
-                        <img class="screenshot-light" src="img/prompter-light.png" alt="Prompter script list" loading="lazy">
-                        <img class="screenshot-dark" src="img/prompter-dark.png" alt="Prompter script list" loading="lazy">
+                        <img class="screenshot-light" src="img/moveproof-light.png" alt="MoveProof property list" loading="lazy">
+                        <img class="screenshot-dark" src="img/moveproof-dark.png" alt="MoveProof property list" loading="lazy">
                     </div>
                     <div class="phone-frame">
-                        <img class="screenshot-light" src="img/prompter-2-light.png" alt="Prompter teleprompter view" loading="lazy">
-                        <img class="screenshot-dark" src="img/prompter-2-dark.png" alt="Prompter teleprompter view" loading="lazy">
+                        <img class="screenshot-light" src="img/moveproof-2-light.png" alt="MoveProof item detail" loading="lazy">
+                        <img class="screenshot-dark" src="img/moveproof-2-dark.png" alt="MoveProof item detail" loading="lazy">
                     </div>
                     <div class="phone-frame">
-                        <img class="screenshot-light" src="img/prompter-3-light.png" alt="Prompter new script menu" loading="lazy">
-                        <img class="screenshot-dark" src="img/prompter-3-dark.png" alt="Prompter new script menu" loading="lazy">
+                        <img class="screenshot-light" src="img/moveproof-3-light.png" alt="MoveProof PDF report" loading="lazy">
+                        <img class="screenshot-dark" src="img/moveproof-3-dark.png" alt="MoveProof PDF report" loading="lazy">
                     </div>
                 </div>
                 <div class="carousel-controls">
@@ -848,9 +940,7 @@
                     <button class="carousel-btn" data-carousel-next aria-label="Next screenshot">&#x203A;</button>
                 </div>
             </div>
-        </div>
-
-        <!-- ── Vault ───────────────────────────────────────────────────── -->
+        </div>        <!-- —— Vault ───────────────────────────────────────────────────── -->
         <div class="app-card">
             <div class="app-info">
                 <div class="app-eyebrow">
@@ -862,7 +952,7 @@
                 <h3>Vault</h3>
                 <p class="app-tagline">
                     <span class="en">An encrypted vault that looks like a calculator.</span>
-                    <span class="fr">Un coffre chiffré qui ressemble à une calculatrice.</span>
+                    <span class="fr">Un coffre chiffré qui ressemble �  une calculatrice.</span>
                     <span class="es">Una bóveda cifrada que parece una calculadora.</span>
                     <span class="pt">Um cofre criptografado que parece uma calculadora.</span>
                 </p>
@@ -931,77 +1021,77 @@
             </div>
         </div>
 
-        <!-- ── MoveProof ───────────────────────────────────────────────── -->
+        <!-- —— Prompter ────────────────────────────────────────────────── -->
         <div class="app-card">
             <div class="app-info">
                 <div class="app-eyebrow">
-                    <span class="en">For tenancy</span>
-                    <span class="fr">Pour la location</span>
-                    <span class="es">Para alquileres</span>
-                    <span class="pt">Para locações</span>
+                    <span class="en">For creators</span>
+                    <span class="fr">Pour les créateurs</span>
+                    <span class="es">Para creadores</span>
+                    <span class="pt">Para criadores</span>
                 </div>
-                <h3>MoveProof</h3>
+                <h3>Prompter</h3>
                 <p class="app-tagline">
-                    <span class="en">Move-in / move-out inspections, on paper-quality PDFs.</span>
-                    <span class="fr">États des lieux d&rsquo;entrée et de sortie, en PDF.</span>
-                    <span class="es">Inspecciones de entrada y salida, en PDF.</span>
-                    <span class="pt">Vistorias de entrada e saída, em PDF.</span>
+                    <span class="en">Teleprompter, recorder, floating overlay.</span>
+                    <span class="fr">Téléprompteur, enregistreur, overlay flottant.</span>
+                    <span class="es">Teleprompter, grabadora, overlay flotante.</span>
+                    <span class="pt">Teleprompter, gravador, overlay flutuante.</span>
                 </p>
 
                 <ul class="app-features en-grid">
-                    <li>Room-by-room checklist with photos &amp; voice notes</li>
-                    <li>Burned-in date, GPS &amp; compass on every photo</li>
-                    <li>SHA-256 page fingerprint on the PDF</li>
-                    <li>Bitcoin-anchored timestamp (OpenTimestamps)</li>
-                    <li>Move-in / move-out linked reports</li>
-                    <li>AR room measurement</li>
+                    <li>Smooth-scrolling teleprompter with mirror mode</li>
+                    <li>Camera recorder with on-screen script</li>
+                    <li>Floating overlay over any app</li>
+                    <li>Bluetooth remote control</li>
+                    <li>Gaze correction while recording</li>
+                    <li>AI script generation &amp; templates</li>
                 </ul>
                 <ul class="app-features fr-grid">
-                    <li>Checklist pièce par pièce avec photos et notes vocales</li>
-                    <li>Date, GPS et boussole incrustés sur chaque photo</li>
-                    <li>Empreinte SHA-256 sur chaque page du PDF</li>
-                    <li>Horodatage ancré sur Bitcoin (OpenTimestamps)</li>
-                    <li>Rapports d&rsquo;entrée et de sortie liés</li>
-                    <li>Mesure de pièce en réalité augmentée</li>
+                    <li>Téléprompteur fluide avec mode miroir</li>
+                    <li>Enregistreur caméra avec texte �  l&rsquo;écran</li>
+                    <li>Overlay flottant par-dessus n&rsquo;importe quelle app</li>
+                    <li>Télécommande Bluetooth</li>
+                    <li>Correction du regard pendant l&rsquo;enregistrement</li>
+                    <li>Génération de scripts IA et modèles</li>
                 </ul>
                 <ul class="app-features es-grid">
-                    <li>Lista habitación por habitación con fotos y voz</li>
-                    <li>Fecha, GPS y brújula incrustados en cada foto</li>
-                    <li>Huella SHA-256 en cada página del PDF</li>
-                    <li>Sello de tiempo en Bitcoin (OpenTimestamps)</li>
-                    <li>Informes de entrada y salida vinculados</li>
-                    <li>Medición con realidad aumentada</li>
+                    <li>Teleprompter fluido con modo espejo</li>
+                    <li>Grabadora con guión en pantalla</li>
+                    <li>Overlay flotante sobre cualquier app</li>
+                    <li>Mando a distancia Bluetooth</li>
+                    <li>Corrección de mirada al grabar</li>
+                    <li>Generación de guiones con IA y plantillas</li>
                 </ul>
                 <ul class="app-features pt-grid">
-                    <li>Checklist cômodo por cômodo com fotos e voz</li>
-                    <li>Data, GPS e bússola gravados em cada foto</li>
-                    <li>Impressão SHA-256 em cada página do PDF</li>
-                    <li>Carimbo de tempo em Bitcoin (OpenTimestamps)</li>
-                    <li>Relatórios de entrada e saída vinculados</li>
-                    <li>Medição com realidade aumentada</li>
+                    <li>Teleprompter com rolagem suave e modo espelho</li>
+                    <li>Gravador com roteiro na tela</li>
+                    <li>Overlay flutuante sobre qualquer app</li>
+                    <li>Controle remoto Bluetooth</li>
+                    <li>Correção de olhar durante a gravação</li>
+                    <li>Geração de roteiros com IA e modelos</li>
                 </ul>
 
-                <a href="https://play.google.com/store/apps/details?id=com.clairtools.moveproof" class="btn btn-primary">
-                    <span class="en">Get MoveProof</span>
-                    <span class="fr">Télécharger MoveProof</span>
-                    <span class="es">Descargar MoveProof</span>
-                    <span class="pt">Baixar MoveProof</span>
+                <a href="https://play.google.com/store/apps/details?id=com.clairtools.prompter" class="btn btn-primary">
+                    <span class="en">Get Prompter</span>
+                    <span class="fr">Télécharger Prompter</span>
+                    <span class="es">Descargar Prompter</span>
+                    <span class="pt">Baixar Prompter</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
             </div>
             <div class="app-screenshot">
-                <div class="phone-carousel" aria-label="MoveProof screenshots">
+                <div class="phone-carousel" aria-label="Prompter screenshots">
                     <div class="phone-frame">
-                        <img class="screenshot-light" src="img/moveproof-light.png" alt="MoveProof property list" loading="lazy">
-                        <img class="screenshot-dark" src="img/moveproof-dark.png" alt="MoveProof property list" loading="lazy">
+                        <img class="screenshot-light" src="img/prompter-light.png" alt="Prompter script list" loading="lazy">
+                        <img class="screenshot-dark" src="img/prompter-dark.png" alt="Prompter script list" loading="lazy">
                     </div>
                     <div class="phone-frame">
-                        <img class="screenshot-light" src="img/moveproof-2-light.png" alt="MoveProof item detail" loading="lazy">
-                        <img class="screenshot-dark" src="img/moveproof-2-dark.png" alt="MoveProof item detail" loading="lazy">
+                        <img class="screenshot-light" src="img/prompter-2-light.png" alt="Prompter teleprompter view" loading="lazy">
+                        <img class="screenshot-dark" src="img/prompter-2-dark.png" alt="Prompter teleprompter view" loading="lazy">
                     </div>
                     <div class="phone-frame">
-                        <img class="screenshot-light" src="img/moveproof-3-light.png" alt="MoveProof PDF report" loading="lazy">
-                        <img class="screenshot-dark" src="img/moveproof-3-dark.png" alt="MoveProof PDF report" loading="lazy">
+                        <img class="screenshot-light" src="img/prompter-3-light.png" alt="Prompter new script menu" loading="lazy">
+                        <img class="screenshot-dark" src="img/prompter-3-dark.png" alt="Prompter new script menu" loading="lazy">
                     </div>
                 </div>
                 <div class="carousel-controls">
@@ -1012,6 +1102,9 @@
             </div>
         </div>
 
+
+
+        </div>
     </div>
 </section>
 
@@ -1054,7 +1147,7 @@
                     <span class="en">Open the app, do the thing, close it. Every pixel serves the task.</span>
                     <span class="fr">Ouvre l&rsquo;appli, fais ta tâche, ferme-la. Chaque pixel sert l&rsquo;essentiel.</span>
                     <span class="es">Abre la app, haz lo tuyo, ciérrala. Cada píxel sirve a la tarea.</span>
-                    <span class="pt">Abra o app, faça o que veio fazer, feche. Cada pixel serve à tarefa.</span>
+                    <span class="pt">Abra o app, faça o que veio fazer, feche. Cada pixel serve �  tarefa.</span>
                 </p>
             </div>
 
@@ -1107,7 +1200,7 @@
                 </div>
                 <h3>
                     <span class="en">Yours, for keeps</span>
-                    <span class="fr">À toi, pour de bon</span>
+                    <span class="fr">� toi, pour de bon</span>
                     <span class="es">Tuyo, para siempre</span>
                     <span class="pt">Seu, para sempre</span>
                 </h3>
@@ -1157,7 +1250,7 @@
                     Your scripts, photos, videos, notes, inspections and lease documents live in app-private storage on your device, encrypted where it counts (Vault uses AES-256-GCM via Android Keystore; MoveProof can anchor a one-way hash of a finished report to OpenTimestamps). Full details in the <a href="/privacy/">privacy policy</a>.
                 </p>
                 <p class="fr-block">
-                    Tes scripts, photos, vidéos, notes, inspections et baux vivent dans le stockage privé de l&rsquo;appli sur ton appareil, chiffrés là où il le faut (Vault utilise AES-256-GCM via Android Keystore&nbsp;; MoveProof peut ancrer une empreinte à sens unique d&rsquo;un rapport sur OpenTimestamps). Détails dans la <a href="/privacy/">politique de confidentialité</a>.
+                    Tes scripts, photos, vidéos, notes, inspections et baux vivent dans le stockage privé de l&rsquo;appli sur ton appareil, chiffrés l�  où il le faut (Vault utilise AES-256-GCM via Android Keystore&nbsp;; MoveProof peut ancrer une empreinte �  sens unique d&rsquo;un rapport sur OpenTimestamps). Détails dans la <a href="/privacy/">politique de confidentialité</a>.
                 </p>
                 <p class="es-block">
                     Tus guiones, fotos, vídeos, notas, inspecciones y contratos viven en el almacenamiento privado de la app en tu dispositivo, cifrados donde importa (Vault usa AES-256-GCM vía Android Keystore; MoveProof puede anclar un hash unidireccional de un informe en OpenTimestamps). Detalles en la <a href="/privacy/">política de privacidad</a>.
@@ -1189,17 +1282,17 @@
                 <span class="pt">Perguntas, ideias, bugs.</span>
             </h2>
             <p>
-                <span class="en">We read every message. Reply within a day, on a good day.</span>
-                <span class="fr">On lit chaque message. Réponse en un jour, dans une bonne journée.</span>
-                <span class="es">Leemos cada mensaje. Respondemos en un día, si es bueno.</span>
-                <span class="pt">Lemos cada mensagem. Resposta em um dia, num bom dia.</span>
+                <span class="en">We read every message.</span>
+                <span class="fr">On lit chaque message.</span>
+                <span class="es">Leemos cada mensaje.</span>
+                <span class="pt">Lemos cada mensagem.</span>
             </p>
-            <a href="mailto:allo@clair.tools" class="contact-email-link">
+            <a href="mailto:hello@clair.tools" class="contact-email-link">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="5" width="18" height="14" rx="2"/>
                     <polyline points="3 7 12 13 21 7"/>
                 </svg>
-                <span>allo@clair.tools</span>
+                <span>hello@clair.tools</span>
             </a>
         </div>
     </div>
@@ -1224,7 +1317,7 @@
                     <span class="es">Privacidad</span>
                     <span class="pt">Privacidade</span>
                 </a>
-                <a href="mailto:allo@clair.tools">allo@clair.tools</a>
+                <a href="mailto:hello@clair.tools">hello@clair.tools</a>
             </span>
         </div>
     </div>
@@ -1244,7 +1337,7 @@
 (function() {
     'use strict';
 
-    /* ── Language ──────────────────────────────────────────────────── */
+    /* —— Language ──────────────────────────────────────────────────── */
     var langs = [
         { code: 'en', flag: '\u{1F1EC}\u{1F1E7}' },
         { code: 'fr', flag: '\u{1F1EB}\u{1F1F7}' },
@@ -1289,7 +1382,7 @@
 
     setLang(detectLang());
 
-    /* ── Theme ─────────────────────────────────────────────────────── */
+    /* —— Theme ─────────────────────────────────────────────────────── */
     var themeBtn = document.getElementById('theme-btn');
 
     function detectTheme() {
@@ -1306,7 +1399,7 @@
         } else {
             document.documentElement.removeAttribute('data-theme');
             themeBtn.textContent = '\u{1F319}';
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#F6F5F2');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#F1ECE0');
         }
         localStorage.setItem('clair-theme', t);
     }
@@ -1322,7 +1415,7 @@
         themeBtn.blur();
     });
 
-    /* ── Carousel ──────────────────────────────────────────────────── */
+    /* —— Carousel ──────────────────────────────────────────────────── */
     document.querySelectorAll('.app-screenshot').forEach(function(root) {
         var track = root.querySelector('.phone-carousel');
         if (!track) return;
@@ -1388,7 +1481,7 @@
         window.addEventListener('resize', syncControls);
     });
 
-    /* ── Lightbox ──────────────────────────────────────────────────── */
+    /* —— Lightbox ──────────────────────────────────────────────────── */
     var lightbox = document.getElementById('lightbox');
     var lightboxTrack = lightbox.querySelector('.lightbox-track');
     var lightboxState = { open: false, lights: [], darks: [] };
