@@ -11,6 +11,7 @@
             --bg: #FAFAF8;
             --muted: #6E6D68;
             --surface: #F6F5F2;
+            --border: #E8E6E1;
         }
         @media (prefers-color-scheme: dark) {
             :root {
@@ -18,6 +19,7 @@
                 --bg: #1A1918;
                 --muted: #9F9E98;
                 --surface: #242320;
+                --border: #333230;
             }
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,24 +29,66 @@
             color: var(--text);
             line-height: 1.7;
             padding: 2rem 1rem;
-            max-width: 720px;
+            max-width: 880px;
             margin: 0 auto;
         }
         h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
         h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.5rem; color: var(--primary); }
+        h3 { font-size: 1rem; margin-top: 1rem; }
         p, ul { margin-bottom: 1rem; }
         ul { padding-left: 1.5rem; }
         li { margin-bottom: 0.4rem; }
         .date { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
         a { color: var(--primary); }
         .badge { display: inline-block; background: var(--surface); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.85rem; margin: 0.2rem; }
+
+        /* —— Permission matrix ——————————————————————————————————— */
+        .matrix-wrap {
+            margin: 1rem 0 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow-x: auto;
+            background: var(--surface);
+        }
+        table.matrix {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            min-width: 640px;
+        }
+        table.matrix th,
+        table.matrix td {
+            padding: 0.7rem 0.9rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        table.matrix thead th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background: var(--bg);
+            border-bottom: 2px solid var(--border);
+        }
+        table.matrix tbody tr:last-child td { border-bottom: none; }
+        table.matrix td.app { text-align: center; font-weight: 600; color: var(--muted); width: 1%; white-space: nowrap; }
+        table.matrix td.app.yes { color: var(--primary); }
+        table.matrix td.perm { font-weight: 600; white-space: nowrap; }
+        table.matrix td.why { color: var(--muted); font-size: 0.88rem; }
+        table.matrix th.app { text-align: center; }
+        @media (max-width: 720px) {
+            table.matrix { font-size: 0.85rem; }
+            table.matrix th, table.matrix td { padding: 0.55rem 0.6rem; }
+        }
     </style>
 </head>
 <body>
     <h1>Privacy Policy</h1>
-    <p class="date">Effective: March 25, 2026</p>
+    <p class="date">Effective: May 21, 2026</p>
 
-    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, and <strong>MoveProof</strong>.</p>
+    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, <strong>MoveProof</strong>, and <strong>GasoSave</strong>.</p>
 
     <h2>What we don't do</h2>
     <ul>
@@ -57,38 +101,121 @@
 
     <h2>What we collect</h2>
 
-    <h3 style="font-size:1rem; margin-top:1rem;">Prompter &amp; MoveProof (Firebase Analytics)</h3>
+    <h3>Prompter, MoveProof &amp; GasoSave (Firebase Analytics)</h3>
     <ul>
         <li><strong>Crash reports</strong> — via Firebase Crashlytics, to fix bugs. Contains device model, OS version, and stack trace. No personal data.</li>
         <li><strong>Basic usage analytics</strong> — via Firebase Analytics with all ad-related consent <strong>denied</strong> (<code>adStorage=DENIED</code>, <code>adPersonalization=DENIED</code>, <code>adUserData=DENIED</code>). We see aggregate counts (e.g., "50 users opened settings"), never individual behavior.</li>
         <li><strong>Firebase Installation ID</strong> — an anonymous device identifier used by Firebase. It is not an advertising ID and cannot identify you.</li>
     </ul>
 
-    <h3 style="font-size:1rem; margin-top:1rem;">Vault</h3>
+    <h3>Vault</h3>
     <ul>
         <li><strong>No analytics. No Firebase. No crash reporting.</strong> Vault is intentionally offline-only. The only network permission is for in-app purchase processing via Google Play.</li>
     </ul>
 
-    <h3 style="font-size:1rem; margin-top:1rem;">All apps (RevenueCat billing)</h3>
+    <h3>All apps (RevenueCat billing)</h3>
     <ul>
         <li><strong>Purchase history</strong> — processed by RevenueCat to manage one-time in-app purchases. RevenueCat receives a pseudonymous app user ID and purchase receipts from Google Play. No name, email, or payment details are sent to us.</li>
     </ul>
 
     <h2>Data storage</h2>
     <ul>
-        <li>All user data (scripts, photos, notes, encrypted files) is stored <strong>locally on your device</strong>.</li>
+        <li>All user data (scripts, photos, notes, encrypted files, fill-ups, trips) is stored <strong>locally on your device</strong>.</li>
         <li>Vault files are encrypted with <strong>AES-256-GCM</strong> using keys stored in the Android Keystore. Even if someone accesses the raw files, they cannot read them without your PIN.</li>
         <li>Backups are created as local ZIP files that you control. Nothing is uploaded.</li>
     </ul>
 
-    <h2>Permissions</h2>
-    <ul>
-        <li><strong>Camera</strong> — Prompter: recording. MoveProof: inspection photos. Vault: importing photos.</li>
-        <li><strong>Microphone</strong> — Prompter: video recording audio. MoveProof: optional video notes.</li>
-        <li><strong>Location</strong> — MoveProof only: GPS coordinates on inspection photos (optional, for proof).</li>
-        <li><strong>Internet</strong> — Required for in-app purchases (RevenueCat/Google Play) and AI generation (Prompter/MoveProof, user-configured). Never used to upload your data.</li>
-        <li><strong>Bluetooth</strong> — Prompter only: remote control for teleprompter scrolling.</li>
-    </ul>
+    <h2>Permissions matrix</h2>
+    <p>Each app only requests the permissions it strictly needs for the features it offers. A blank cell means the app does not request that permission at all.</p>
+
+    <div class="matrix-wrap">
+        <table class="matrix">
+            <thead>
+                <tr>
+                    <th>Permission</th>
+                    <th class="app">Prompter</th>
+                    <th class="app">Vault</th>
+                    <th class="app">MoveProof</th>
+                    <th class="app">GasoSave</th>
+                    <th>Why we ask</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="perm">Camera</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Prompter: recording with the teleprompter. Vault: importing photos directly into the encrypted vault. MoveProof: inspection photos. GasoSave: scanning fuel receipts.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Microphone</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app">—</td>
+                    <td class="why">Audio track for video recording (Prompter, MoveProof) and voice notes (Vault, MoveProof). GasoSave does not record audio.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Location</td>
+                    <td class="app">—</td>
+                    <td class="app">—</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">MoveProof: optional GPS coordinates burned into inspection photos as proof of place. GasoSave: GPS distance for trips and station-aware fuel prices.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Bluetooth</td>
+                    <td class="app yes">✓</td>
+                    <td class="app">—</td>
+                    <td class="app">—</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Prompter: remote control for teleprompter scrolling. GasoSave: detecting a paired car connection to auto-start a trip.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Biometrics</td>
+                    <td class="app">—</td>
+                    <td class="app yes">✓</td>
+                    <td class="app">—</td>
+                    <td class="app">—</td>
+                    <td class="why">Vault: optional fingerprint or face unlock instead of typing the PIN.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Display over other apps</td>
+                    <td class="app yes">✓</td>
+                    <td class="app">—</td>
+                    <td class="app">—</td>
+                    <td class="app">—</td>
+                    <td class="why">Prompter: the floating teleprompter overlay that stays visible on top of other apps.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Foreground service</td>
+                    <td class="app yes">✓</td>
+                    <td class="app">—</td>
+                    <td class="app">—</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Prompter: keeps the recorder and floating overlay running while you switch apps. GasoSave: keeps the trip recorder running in the background until you stop.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Internet</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Required for in-app purchases via Google Play / RevenueCat, and for optional AI generation (Prompter, MoveProof) and fuel-price lookup (GasoSave). Never used to upload your data.</td>
+                </tr>
+                <tr>
+                    <td class="perm">Notifications</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Android 13+ runtime opt-in. Used only for the notifications the running service must show (recording, overlay, trip in progress) and never for promotions.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <h2>Your rights</h2>
     <ul>
