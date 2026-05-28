@@ -298,6 +298,14 @@
         .btn-secondary:hover { background: var(--surface-muted); }
         [data-theme="dark"] .btn-secondary { background: var(--surface); }
         [data-theme="dark"] .btn-secondary:hover { background: var(--surface-muted); }
+        .btn-disabled {
+            background: var(--surface-muted);
+            color: var(--text-muted);
+            border-color: var(--border);
+            cursor: default;
+            pointer-events: none;
+        }
+        .btn-disabled:hover { background: var(--surface-muted); color: var(--text-muted); transform: none; }
         .btn svg { width: 16px; height: 16px; }
 
         /* —— Trust ────────────────────────────────────────────────────── */
@@ -1107,13 +1115,12 @@
                     <li>Geração de roteiros com IA e modelos</li>
                 </ul>
 
-                <a href="https://play.google.com/store/apps/details?id=com.clairtools.prompter" class="btn btn-primary">
-                    <span class="en">Get Prompter</span>
-                    <span class="fr">Télécharger Prompter</span>
-                    <span class="es">Descargar Prompter</span>
-                    <span class="pt">Baixar Prompter</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
+                <span class="btn btn-disabled" aria-disabled="true">
+                    <span class="en">Coming soon</span>
+                    <span class="fr">Bientôt disponible</span>
+                    <span class="es">Próximamente</span>
+                    <span class="pt">Em breve</span>
+                </span>
             </div>
             <div class="app-screenshot">
                 <div class="phone-carousel" aria-label="Prompter screenshots">
@@ -1188,13 +1195,12 @@
                     <li>Cartão Android Auto e widget na tela inicial</li>
                 </ul>
 
-                <a href="https://play.google.com/store/apps/details?id=com.clairtools.gasosave" class="btn btn-primary">
-                    <span class="en">Get GasoSave</span>
-                    <span class="fr">Télécharger GasoSave</span>
-                    <span class="es">Descargar GasoSave</span>
-                    <span class="pt">Baixar GasoSave</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
+                <span class="btn btn-disabled" aria-disabled="true">
+                    <span class="en">Coming soon</span>
+                    <span class="fr">Bientôt disponible</span>
+                    <span class="es">Próximamente</span>
+                    <span class="pt">Em breve</span>
+                </span>
             </div>
             <div class="app-screenshot">
                 <div class="phone-carousel" aria-label="GasoSave screenshots">
