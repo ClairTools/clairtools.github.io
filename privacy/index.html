@@ -88,7 +88,7 @@
     <h1>Privacy Policy</h1>
     <p class="date">Effective: May 21, 2026</p>
 
-    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, <strong>MoveProof</strong>, and <strong>GasoSave</strong>.</p>
+    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, <strong>MoveProof</strong>, <strong>GasoSave</strong>, and <strong>Caelo</strong>.</p>
 
     <h2>What we don't do</h2>
     <ul>
@@ -101,7 +101,7 @@
 
     <h2>What we collect</h2>
 
-    <h3>Prompter, MoveProof &amp; GasoSave (Firebase Analytics)</h3>
+    <h3>Prompter, MoveProof, GasoSave &amp; Caelo (Firebase Analytics)</h3>
     <ul>
         <li><strong>Crash reports</strong> — via Firebase Crashlytics, to fix bugs. Contains device model, OS version, and stack trace. No personal data.</li>
         <li><strong>Basic usage analytics</strong> — via Firebase Analytics with all ad-related consent <strong>denied</strong> (<code>adStorage=DENIED</code>, <code>adPersonalization=DENIED</code>, <code>adUserData=DENIED</code>). We see aggregate counts (e.g., "50 users opened settings"), never individual behavior.</li>
@@ -137,6 +137,7 @@
                     <th class="app">Vault</th>
                     <th class="app">MoveProof</th>
                     <th class="app">GasoSave</th>
+                    <th class="app">Caelo</th>
                     <th>Why we ask</th>
                 </tr>
             </thead>
@@ -147,6 +148,7 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
+                    <td class="app">—</td>
                     <td class="why">Prompter: recording with the teleprompter. Vault: importing photos directly into the encrypted vault. MoveProof: inspection photos. GasoSave: scanning fuel receipts.</td>
                 </tr>
                 <tr>
@@ -155,7 +157,8 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app">—</td>
-                    <td class="why">Audio track for video recording (Prompter, MoveProof) and voice notes (Vault, MoveProof). GasoSave does not record audio.</td>
+                    <td class="app">—</td>
+                    <td class="why">Audio track for video recording (Prompter, MoveProof) and voice notes (Vault, MoveProof). GasoSave and Caelo do not record audio.</td>
                 </tr>
                 <tr>
                     <td class="perm">Location</td>
@@ -163,7 +166,8 @@
                     <td class="app">—</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
-                    <td class="why">MoveProof: optional GPS coordinates burned into inspection photos as proof of place. GasoSave: GPS distance for trips and station-aware fuel prices.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">MoveProof: optional GPS coordinates burned into inspection photos as proof of place. GasoSave: GPS distance for trips and station-aware fuel prices. Caelo: a one-shot GPS fix for your local forecast — used once, never stored, never sent to us.</td>
                 </tr>
                 <tr>
                     <td class="perm">Bluetooth</td>
@@ -171,6 +175,7 @@
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app yes">✓</td>
+                    <td class="app">—</td>
                     <td class="why">Prompter: remote control for teleprompter scrolling. GasoSave: detecting a paired car connection to auto-start a trip.</td>
                 </tr>
                 <tr>
@@ -179,11 +184,13 @@
                     <td class="app yes">✓</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
+                    <td class="app">—</td>
                     <td class="why">Vault: optional fingerprint or face unlock instead of typing the PIN.</td>
                 </tr>
                 <tr>
                     <td class="perm">Display over other apps</td>
                     <td class="app yes">✓</td>
+                    <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
@@ -195,6 +202,7 @@
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app yes">✓</td>
+                    <td class="app">—</td>
                     <td class="why">Prompter: keeps the recorder and floating overlay running while you switch apps. GasoSave: keeps the trip recorder running in the background until you stop.</td>
                 </tr>
                 <tr>
@@ -203,7 +211,8 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
-                    <td class="why">Required for in-app purchases via Google Play / RevenueCat, and for optional AI generation (Prompter, MoveProof) and fuel-price lookup (GasoSave). Never used to upload your data.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Required for in-app purchases via Google Play / RevenueCat, and for optional AI generation (Prompter, MoveProof), fuel-price lookup (GasoSave), and weather forecasts and radar (Caelo). Never used to upload your data.</td>
                 </tr>
                 <tr>
                     <td class="perm">Notifications</td>
@@ -211,7 +220,8 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
-                    <td class="why">Android 13+ runtime opt-in. Used only for the notifications the running service must show (recording, overlay, trip in progress) and never for promotions.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Android 13+ runtime opt-in. Used only for the notifications the running service must show (recording, overlay, trip in progress, weather alerts) and never for promotions.</td>
                 </tr>
             </tbody>
         </table>
