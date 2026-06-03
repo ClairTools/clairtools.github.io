@@ -353,10 +353,166 @@
 
         /* —— Apps ─────────────────────────────────────────────────────── */
         .apps { padding: 40px 0 96px; }
-        .apps-stack {
+
+        /* —— Split-pane wrapper ───────────────────────────────────────── */
+        .apps-body {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 0 40px;
+            align-items: start;
+            margin-top: 40px;
+        }
+
+        /* —— Catalogue sidebar ────────────────────────────────────────── */
+        .catalogue {
+            position: sticky;
+            top: 68px;
             display: flex;
             flex-direction: column;
-            gap: 28px;
+            gap: 2px;
+            padding: 4px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+        }
+        .cat-tile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 10px 12px;
+            border-radius: var(--r-md);
+            border: 1px solid transparent;
+            background: transparent;
+            text-align: left;
+            font-family: inherit;
+            color: var(--text);
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        @media (hover: hover) {
+            .cat-tile:hover { background: var(--surface-muted); }
+        }
+        .cat-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .cat-tile[aria-expanded="true"] {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+        .cat-mark {
+            width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+            background: var(--accent-soft); color: var(--accent);
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .cat-tile[aria-expanded="true"] .cat-mark { background: color-mix(in oklab, var(--accent) 12%, var(--surface)); }
+        .cat-mark svg { width: 18px; height: 18px; }
+        .cat-text { flex: 1; min-width: 0; }
+        .cat-name {
+            display: block;
+            font-size: 0.92rem; font-weight: 700; letter-spacing: -0.01em;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .cat-eyebrow {
+            display: block;
+            font-size: 0.68rem; font-weight: 600; letter-spacing: 0.07em;
+            text-transform: uppercase; color: var(--text-faint); margin-top: 1px;
+        }
+        .cat-tile[aria-expanded="true"] .cat-eyebrow { color: var(--accent); }
+        .cat-status {
+            display: inline-flex; align-items: center; flex-shrink: 0;
+        }
+        .cat-status::before {
+            content: ''; width: 7px; height: 7px; border-radius: 50%; display: block;
+        }
+        .cat-status span { display: none; } /* hide text label — dot only in sidebar */
+        .cat-status--live::before { background: var(--trust); }
+        .cat-status--soon::before { background: var(--text-faint); }
+
+        /* —— Apps stack (detail area) ─────────────────────────────────── */
+        .apps-stack {
+            min-width: 0;
+        }
+        .app-card[hidden] { display: none !important; }
+        .app-card { scroll-margin-top: 88px; }
+
+            /* —— Empty state ─────────────────────────────────────────────────── */
+        .apps-empty {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 14px; padding: 80px 24px;
+            color: var(--text-faint);
+            border: 1.5px dashed var(--border-strong);
+            border-radius: var(--r-lg);
+            text-align: center;
+        }
+        .apps-empty svg { opacity: 0.35; }
+        .apps-empty p { font-size: 0.95rem; line-height: 1.5; }
+        .apps-empty[hidden] { display: none !important; }
+        @media (max-width: 800px) { .apps-empty { display: none; } }
+
+            /* —— App detail bar: visible on mobile only ───────────────────── */
+        .app-detail-bar {
+            grid-column: 1 / -1;
+            order: -2;
+            display: none; /* hidden on desktop — catalogue sidebar serves as nav */
+            align-items: center; justify-content: space-between;
+            gap: 16px;
+            padding-bottom: 18px;
+            margin-bottom: 4px;
+            border-bottom: 1px solid var(--border);
+        }
+        .app-back {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: none; border: 0; padding: 4px 2px;
+            font-family: inherit; font-size: 0.88rem; font-weight: 600;
+            color: var(--text-muted); cursor: pointer;
+            border-radius: var(--r-sm); transition: color 0.15s ease;
+        }
+        .app-back:hover { color: var(--text); }
+        .app-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .app-back svg { width: 15px; height: 15px; }
+        .app-detail-bar .cat-status { font-size: 0.82rem; }
+        .app-detail-bar .cat-status span { display: inline; } /* show label in detail bar */
+
+        /* —— Mobile: horizontal tab strip ────────────────────────────── */
+        @media (max-width: 800px) {
+            .apps-body {
+                grid-template-columns: 1fr;
+                gap: 0;
+                margin-top: 24px;
+            }
+            .catalogue {
+                position: sticky;
+                top: 55px;
+                z-index: 40;
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: visible;
+                max-height: none;
+                gap: 6px;
+                padding: 10px;
+                border-radius: var(--r-lg);
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .catalogue::-webkit-scrollbar { display: none; }
+            .cat-tile {
+                flex-direction: column;
+                align-items: center;
+                flex-shrink: 0;
+                gap: 5px;
+                padding: 8px 12px;
+                width: auto;
+                text-align: center;
+            }
+            .cat-text { text-align: center; }
+            .cat-name { font-size: 0.78rem; white-space: nowrap; }
+            .cat-eyebrow { display: none; }
+            .cat-status { display: none; }
+            .apps-stack { margin-top: 20px; }
+            .app-card { scroll-margin-top: 160px; } /* nav ~55px + tab strip ~88px + buffer */
+            
         }
         .app-card {
             display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 56px;
@@ -385,11 +541,6 @@
                 box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 18px 40px -18px rgba(0,0,0,0.5);
             }
         }
-        .app-card:nth-of-type(even) {
-            grid-template-columns: 280px minmax(0, 1fr);
-        }
-        .app-card:nth-of-type(even) .app-screenshot { order: -1; }
-
         .app-info { min-width: 0; }
         .app-info > * { overflow-wrap: anywhere; word-break: break-word; }
         .app-eyebrow {
@@ -457,6 +608,10 @@
         }
 
         .app-screenshot { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        /* In stacked (single-col) layout the screenshot sits above the info — add bottom breathing room */
+        @media (max-width: 860px) {
+            .app-screenshot { margin-bottom: 8px; }
+        }
         .phone-carousel {
             display: flex; gap: 16px;
             width: 240px; max-width: 100%;
@@ -528,13 +683,11 @@
         .carousel-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
         @media (max-width: 860px) {
-            .app-card,
-            .app-card:nth-of-type(even) {
+            .app-card {
                 grid-template-columns: 1fr;
                 gap: 32px;
-                padding: 36px 32px;
+                padding: 40px 36px;
             }
-            .app-card:nth-of-type(even) .app-screenshot { order: -1; }
             .app-card .app-screenshot { order: -1; }
             .app-features { grid-template-columns: 1fr; gap: 8px; }
             .phone-carousel { width: 220px; }
@@ -542,8 +695,7 @@
         }
         @media (max-width: 520px) {
             .apps-stack { gap: 20px; }
-            .app-card,
-            .app-card:nth-of-type(even) {
+            .app-card {
                 padding: 28px 22px;
                 gap: 28px;
                 border-radius: var(--r-lg);
@@ -555,6 +707,24 @@
             .phone-frame { flex: 0 0 200px; width: 200px; max-height: 440px; }
         }
 
+/* —— Data / Privacy section ───────────────────────────────────────── */
+        .data-section {
+            --accent: var(--trust);
+            --accent-soft: var(--trust-soft);
+            --accent-strong: var(--trust-strong);
+        }
+        [data-theme="dark"] .data-section {
+            --accent: var(--green-200);
+            --accent-soft: #1A2E25;
+            --accent-strong: var(--green-100);
+        }
+        .data-section .privacy-block { border-color: var(--green-100); }
+        [data-theme="dark"] .data-section .privacy-block { border-color: var(--green-800); }
+        .data-section .privacy-block-header { border-bottom-color: var(--green-100); }
+        [data-theme="dark"] .data-section .privacy-block-header { border-bottom-color: var(--green-800); }
+        .data-section .privacy-fact { border-right-color: var(--green-100); border-bottom-color: var(--green-100); }
+        [data-theme="dark"] .data-section .privacy-fact { border-right-color: var(--green-800); border-bottom-color: var(--green-800); }
+
         /* —— Privacy / Data ──────────────────────────────────────────── */
         .privacy-block {
             max-width: 760px;
@@ -564,42 +734,75 @@
             box-shadow:
                 0 1px 2px rgba(40,38,32,0.03),
                 0 4px 12px -8px rgba(40,38,32,0.06);
-            overflow: hidden;
         }
         [data-theme="dark"] .privacy-block {
             border-color: var(--border);
             box-shadow: none;
         }
-        .privacy-details summary {
-            list-style: none; cursor: pointer;
-            padding: 22px 28px;
-            font-size: 1rem; font-weight: 600;
-            color: var(--text);
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 16px;
+        .privacy-block-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 24px 28px 20px;
+            border-bottom: 1px solid var(--border);
         }
-        .privacy-details summary::-webkit-details-marker { display: none; }
-        .privacy-details summary::after {
-            content: '';
-            width: 14px; height: 14px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236E6C66' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            transition: transform 0.25s ease;
-            flex-shrink: 0;
+        .privacy-shield {
+            width: 32px; height: 32px; flex-shrink: 0;
+            background: var(--accent-soft); color: var(--accent);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
         }
-        [data-theme="dark"] .privacy-details summary::after {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239A9994' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        .privacy-heading {
+            font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em;
+            margin: 0;
         }
-        .privacy-details[open] summary::after { transform: rotate(180deg); }
-        .privacy-body {
-            padding: 0 28px 26px;
-            font-size: 0.95rem; line-height: 1.65;
-            color: var(--text-muted);
+        .privacy-facts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
         }
+        .privacy-fact {
+            display: flex; gap: 14px; align-items: flex-start;
+            padding: 22px 24px;
+            border-right: 1px solid var(--border);
+        }
+        .privacy-fact:last-child { border-right: none; }
+        .privacy-fact-icon {
+            flex-shrink: 0; margin-top: 1px;
+            color: var(--accent);
+        }
+        .privacy-fact strong {
+            display: block; font-size: 0.88rem; font-weight: 700;
+            margin-bottom: 6px; color: var(--text);
+        }
+        .privacy-fact p {
+            font-size: 0.84rem; line-height: 1.6;
+            color: var(--text-muted); margin: 0;
+        }
+        .privacy-fact a { color: var(--accent); font-weight: 500; text-decoration: none; }
+        .privacy-fact a:hover { text-decoration: underline; }
+        @media (max-width: 680px) {
+            .privacy-facts { grid-template-columns: 1fr; }
+            .privacy-fact { border-right: none; border-bottom: 1px solid var(--border); padding: 18px 20px; }
+            .privacy-fact:last-child { border-bottom: none; }
+            .privacy-block-header { padding: 20px 20px 16px; }
+        }
+
         .privacy-body a { color: var(--accent); font-weight: 500; }
 
-        /* —— Contact ──────────────────────────────────────────────────── */
+        .privacy-policy-row {
+            display: flex;
+            justify-content: flex-end;
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--green-100);
+        }
+        [data-theme="dark"] .privacy-policy-row { border-top-color: var(--green-800); }
+        .privacy-policy-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 600;
+            color: var(--accent); text-decoration: none;
+            transition: opacity 0.15s ease;
+        }
+        .privacy-policy-link:hover { opacity: 0.75; }
+                /* —— Contact ──────────────────────────────────────────────────── */
         .contact-block {
             text-align: center;
             background: var(--surface);
@@ -791,7 +994,7 @@
 <section class="hero">
     <div class="container">
         <div class="hero-logo" aria-hidden="true">
-            <svg width="72" height="72" viewBox="0 0 48 48" fill="none">
+            <svg width="72" height="72" viewBox="0 0 48 48" fill="none" style="width: 200px; height: 200px;">
                 <defs>
                     <linearGradient id="heroGrad" x1="5" y1="24" x2="39" y2="24" gradientUnits="userSpaceOnUse">
                         <stop offset="0%" stop-color="#1B7CC4"/>
@@ -813,11 +1016,14 @@
             <span class="es">Herramientas simples,<br><span class="accent">hechas con honestidad.</span></span>
             <span class="pt">Ferramentas simples,<br><span class="accent">feitas com honestidade.</span></span>
         </h1>
-        <p class="hero-lede">
-            <span class="en">Ad-free, privacy-first apps that respect the people using them. Everything stays on your phone.</span>
-            <span class="fr">Des applis sans pub, respectueuses de la vie privée. Tout reste sur ton téléphone.</span>
-            <span class="es">Apps sin anuncios, centradas en la privacidad. Todo se queda en tu teléfono.</span>
-            <span class="pt">Apps sem anúncios e focados em privacidade. Tudo fica no seu celular.</span>
+        <p class="hero-lede" style="width: 660px;">
+            <span class="en">Ad-free,
+Privacy-first apps that respect the people using them. 
+Everything stays on your phone.</span>
+            <span class="fr" style="text-align: justify">Des applis sans pub, respectueuses de la vie privée. 
+Tout reste sur ton téléphone.</span>
+            <span class="es">Apps sin anuncios, centradas en la privacidad.<br>Todo se queda en tu teléfono.</span>
+            <span class="pt">Apps sem anúncios e focados em privacidade.<br>Tudo fica no seu celular.</span>
         </p>
         <div class="hero-actions">
             <a href="#apps" class="btn btn-primary">
@@ -850,23 +1056,96 @@
                 <span class="pt">Os apps</span>
             </span>
             <h2 class="section-title">
-                <span class="en">Four tools. Each does one thing well.</span>
-                <span class="fr">Quatre outils. Chacun fait une chose, bien.</span>
-                <span class="es">Cuatro herramientas. Cada una hace una cosa, bien.</span>
-                <span class="pt">Quatro ferramentas. Cada uma faz uma coisa, bem.</span>
+                <span class="en">Focused tools, each built around a single job.</span>
+                <span class="fr">Des outils ciblés, chacun pensé pour une seule tâche.</span>
+                <span class="es">Herramientas enfocadas, cada una pensada para una sola tarea.</span>
+                <span class="pt">Ferramentas focadas, cada uma feita para uma única tarefa.</span>
             </h2>
             <p class="section-lede">
-                <span class="en">Focused Android apps for creators, drivers, privacy and tenancy. Built and maintained by one studio.</span>
-                <span class="fr">Des applis Android ciblées pour les créateurs, les conducteurs, la confidentialité et la location. Conçues et maintenues par un seul studio.</span>
-                <span class="es">Apps Android enfocadas para creadores, conductores, privacidad y alquileres. Hechas y mantenidas por un solo estudio.</span>
-                <span class="pt">Apps Android focados em criadores, motoristas, privacidade e locações. Feitos e mantidos por um único estúdio.</span>
+                <span class="en">Pick an app to see what it does, how it works and what it keeps private.<br>Built and maintained by one studio.</span>
+                <span class="fr">Choisis une appli pour voir ce qu&rsquo;elle fait, comment elle fonctionne et ce qu&rsquo;elle garde privé.<br>Conçue et maintenue par un seul studio.</span>
+                <span class="es">Elige una app para ver qué hace, cómo funciona y qué mantiene en privado.<br>Hecha y mantenida por un solo estudio.</span>
+                <span class="pt">Escolha um app para ver o que faz, como funciona e o que mantém privado.<br>Feito e mantido por um único estúdio.</span>
             </p>
         </div>
 
-        <div class="apps-stack">
+        <!-- —— Split-pane: catalogue sidebar + detail area ─────────── -->
+        <div class="apps-body">
+
+        <!-- Catalogue sidebar -->
+        <nav class="catalogue" id="catalogue" aria-label="App catalogue">
+
+            <button type="button" class="cat-tile" data-app="vault" aria-expanded="false" aria-controls="detail-vault">
+                <span class="cat-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
+                <span class="cat-text">
+                    <span class="cat-name">Vault</span>
+                    <span class="cat-eyebrow"><span class="en">Privacy</span><span class="fr">Confidentialité</span><span class="es">Privacidad</span><span class="pt">Privacidade</span></span>
+                </span>
+                <span class="cat-status cat-status--live" aria-label="Available"></span>
+            </button>
+
+            <button type="button" class="cat-tile" data-app="moveproof" aria-expanded="false" aria-controls="detail-moveproof">
+                <span class="cat-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12.5l2.2 2.2 4.6-5"/></svg>
+                </span>
+                <span class="cat-text">
+                    <span class="cat-name">MoveProof</span>
+                    <span class="cat-eyebrow"><span class="en">Tenancy</span><span class="fr">Location</span><span class="es">Alquileres</span><span class="pt">Locações</span></span>
+                </span>
+                <span class="cat-status cat-status--live" aria-label="Available"></span>
+            </button>
+
+            <button type="button" class="cat-tile" data-app="caelo" aria-expanded="false" aria-controls="detail-caelo">
+                <span class="cat-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                </span>
+                <span class="cat-text">
+                    <span class="cat-name">Caelo</span>
+                    <span class="cat-eyebrow"><span class="en">Weather</span><span class="fr">Météo</span><span class="es">Tiempo</span><span class="pt">Tempo</span></span>
+                </span>
+                <span class="cat-status cat-status--soon" aria-label="Coming soon"></span>
+            </button>
+
+            <button type="button" class="cat-tile" data-app="prompter" aria-expanded="false" aria-controls="detail-prompter">
+                <span class="cat-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
+                </span>
+                <span class="cat-text">
+                    <span class="cat-name">Prompter</span>
+                    <span class="cat-eyebrow"><span class="en">Creators</span><span class="fr">Créateurs</span><span class="es">Creadores</span><span class="pt">Criadores</span></span>
+                </span>
+                <span class="cat-status cat-status--soon" aria-label="Coming soon"></span>
+            </button>
+
+            <button type="button" class="cat-tile" data-app="gasosave" aria-expanded="false" aria-controls="detail-gasosave">
+                <span class="cat-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+                </span>
+                <span class="cat-text">
+                    <span class="cat-name">GasoSave</span>
+                    <span class="cat-eyebrow"><span class="en">Drivers</span><span class="fr">Conducteurs</span><span class="es">Conductores</span><span class="pt">Motoristas</span></span>
+                </span>
+                <span class="cat-status cat-status--soon" aria-label="Coming soon"></span>
+            </button>
+
+        </nav><!-- /catalogue -->
+
+        <!-- Detail area -->
+        <div class="apps-stack" id="apps-stack">
+
+        <!-- Empty state -->
+        <div class="apps-empty" id="apps-empty">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            <p class="en">Select an app to see the details.</p>
+            <p class="fr">Choisis une app pour voir les détails.</p>
+            <p class="es">Selecciona una app para ver los detalles.</p>
+            <p class="pt">Selecione um app para ver os detalhes.</p>
+        </div>
 
         <!-- —— MoveProof ───────────────────────────────────────────────── -->
-        <div class="app-card">
+        <div class="app-card" id="detail-moveproof" data-detail="moveproof" hidden>
             <div class="app-info">
                 <div class="app-eyebrow">
                     <span class="en">For tenancy</span>
@@ -965,7 +1244,7 @@
                 </div>
             </div>
         </div>        <!-- —— Vault ───────────────────────────────────────────────────── -->
-        <div class="app-card">
+        <div class="app-card" id="detail-vault" data-detail="vault" hidden>
             <div class="app-info">
                 <div class="app-eyebrow">
                     <span class="en">For privacy</span>
@@ -1065,8 +1344,92 @@
             </div>
         </div>
 
+        <!-- —— Caelo ──────────────────────────────────────────────────── -->
+        <div class="app-card" id="detail-caelo" data-detail="caelo" hidden>
+            <div class="app-info">
+                <div class="app-eyebrow">
+                    <span class="en">For weather</span>
+                    <span class="fr">Pour la météo</span>
+                    <span class="es">Para el tiempo</span>
+                    <span class="pt">Para o tempo</span>
+                </div>
+                <h3>Caelo</h3>
+                <p class="app-tagline">
+                    <span class="en">Accurate forecasts, radar and air quality &mdash; with no accounts, no ads and nothing tracking you.</span>
+                    <span class="fr">Prévisions précises, radar et qualité de l&rsquo;air &mdash; sans compte, sans pub et sans pistage.</span>
+                    <span class="es">Pronósticos precisos, radar y calidad del aire &mdash; sin cuentas, sin anuncios y sin rastreo.</span>
+                    <span class="pt">Previsões precisas, radar e qualidade do ar &mdash; sem contas, sem anúncios e sem rastreio.</span>
+                </p>
+
+                <ul class="app-features en-grid">
+                    <li>7-day &amp; hourly forecast, 16-day extended</li>
+                    <li>Animated precipitation radar</li>
+                    <li>Air quality, pollen &amp; UV index</li>
+                    <li>Severe-weather alerts</li>
+                    <li>One-shot GPS &mdash; never stored</li>
+                    <li>Home-screen widgets</li>
+                </ul>
+                <ul class="app-features fr-grid">
+                    <li>Prévisions 7 jours et horaires, jusqu&rsquo;à 16 jours</li>
+                    <li>Radar de précipitations animé</li>
+                    <li>Qualité de l&rsquo;air, pollen et indice UV</li>
+                    <li>Alertes météo</li>
+                    <li>GPS ponctuel &mdash; jamais stocké</li>
+                    <li>Widgets d&rsquo;écran d&rsquo;accueil</li>
+                </ul>
+                <ul class="app-features es-grid">
+                    <li>Pronóstico de 7 días y por hora, hasta 16 días</li>
+                    <li>Radar de precipitación animado</li>
+                    <li>Calidad del aire, polen e índice UV</li>
+                    <li>Alertas meteorológicas</li>
+                    <li>GPS puntual &mdash; nunca almacenado</li>
+                    <li>Widgets de pantalla de inicio</li>
+                </ul>
+                <ul class="app-features pt-grid">
+                    <li>Previsão de 7 dias e por hora, até 16 dias</li>
+                    <li>Radar de precipitação animado</li>
+                    <li>Qualidade do ar, pólen e índice UV</li>
+                    <li>Alertas meteorológicos</li>
+                    <li>GPS pontual &mdash; nunca armazenado</li>
+                    <li>Widgets na tela inicial</li>
+                </ul>
+
+                <span class="btn btn-disabled" aria-disabled="true">
+                    <span class="en">Coming soon</span>
+                    <span class="fr">Bientôt disponible</span>
+                    <span class="es">Próximamente</span>
+                    <span class="pt">Em breve</span>
+                </span>
+            </div>
+            <div class="app-screenshot">
+                <div class="phone-carousel" aria-label="Caelo screenshots">
+                    <div class="phone-frame">
+                        <img class="screenshot-light" src="img/caelo-light.png" alt="Caelo home and current conditions" loading="lazy">
+                        <img class="screenshot-dark" src="img/caelo-dark.png" alt="Caelo home and current conditions" loading="lazy">
+                    </div>
+                    <div class="phone-frame">
+                        <img class="screenshot-light" src="img/caelo-2-light.png" alt="Caelo 7-day forecast" loading="lazy">
+                        <img class="screenshot-dark" src="img/caelo-2-dark.png" alt="Caelo 7-day forecast" loading="lazy">
+                    </div>
+                    <div class="phone-frame">
+                        <img class="screenshot-light" src="img/caelo-3-light.png" alt="Caelo animated radar" loading="lazy">
+                        <img class="screenshot-dark" src="img/caelo-3-dark.png" alt="Caelo animated radar" loading="lazy">
+                    </div>
+                    <div class="phone-frame">
+                        <img class="screenshot-light" src="img/caelo-4-light.png" alt="Caelo air quality" loading="lazy">
+                        <img class="screenshot-dark" src="img/caelo-4-dark.png" alt="Caelo air quality" loading="lazy">
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-btn" data-carousel-prev aria-label="Previous screenshot">&#x2039;</button>
+                    <span class="carousel-dots" role="tablist"></span>
+                    <button class="carousel-btn" data-carousel-next aria-label="Next screenshot">&#x203A;</button>
+                </div>
+            </div>
+        </div>
+
         <!-- —— Prompter ────────────────────────────────────────────────── -->
-        <div class="app-card">
+        <div class="app-card" id="detail-prompter" data-detail="prompter" hidden>
             <div class="app-info">
                 <div class="app-eyebrow">
                     <span class="en">For creators</span>
@@ -1146,7 +1509,7 @@
         </div>
 
         <!-- —— GasoSave ────────────────────────────────────────────────── -->
-        <div class="app-card">
+        <div class="app-card" id="detail-gasosave" data-detail="gasosave" hidden>
             <div class="app-info">
                 <div class="app-eyebrow">
                     <span class="en">For drivers</span>
@@ -1237,7 +1600,8 @@
             </div>
         </div>
 
-        </div>
+        </div><!-- /apps-stack -->
+        </div><!-- /apps-body -->
     </div>
 </section>
 
@@ -1277,10 +1641,10 @@
                     <span class="pt">Sem anúncios, sempre</span>
                 </h3>
                 <p>
-                    <span class="en">Open the app, do the thing, close it. Every pixel serves the task.</span>
-                    <span class="fr">Ouvre l&rsquo;appli, fais ta tâche, ferme-la. Chaque pixel sert l&rsquo;essentiel.</span>
-                    <span class="es">Abre la app, haz lo tuyo, ciérrala. Cada píxel sirve a la tarea.</span>
-                    <span class="pt">Abra o app, faça o que veio fazer, feche. Cada pixel serve à tarefa.</span>
+                    <span class="en">Open the app, do the thing, close it.<br>Every pixel serves the task.</span>
+                    <span class="fr">Ouvre l&rsquo;appli, fais ta tâche, ferme-la.<br>Chaque pixel sert l&rsquo;essentiel.</span>
+                    <span class="es">Abre la app, haz lo tuyo, ciérrala.<br>Cada píxel sirve a la tarea.</span>
+                    <span class="pt">Abra o app, faça o que veio fazer, feche.<br>Cada pixel serve à tarefa.</span>
                 </p>
             </div>
 
@@ -1297,10 +1661,10 @@
                     <span class="pt">Anônimo por padrão</span>
                 </h3>
                 <p>
-                    <span class="en">No account. No tracking. We don&rsquo;t need to know who you are to be useful.</span>
-                    <span class="fr">Pas de compte. Pas de pistage. Pas besoin de savoir qui tu es pour être utile.</span>
-                    <span class="es">Sin cuenta. Sin rastreo. No necesitamos saber quién eres para serte útil.</span>
-                    <span class="pt">Sem conta. Sem rastreio. Não precisamos saber quem você é para ser útil.</span>
+                    <span class="en">No account. No tracking.<br>We don&rsquo;t need to know who you are to be useful.</span>
+                    <span class="fr">Pas de compte. Pas de pistage.<br>Pas besoin de savoir qui tu es pour être utile.</span>
+                    <span class="es">Sin cuenta. Sin rastreo.<br>No necesitamos saber quién eres para serte útil.</span>
+                    <span class="pt">Sem conta. Sem rastreio.<br>Não precisamos saber quem você é para ser útil.</span>
                 </p>
             </div>
 
@@ -1338,10 +1702,10 @@
                     <span class="pt">Seu, para sempre</span>
                 </h3>
                 <p>
-                    <span class="en">Unlock Pro once and keep it. New features stay included.</span>
-                    <span class="fr">Débloque Pro une fois, garde-le. Les nouvelles fonctions restent incluses.</span>
-                    <span class="es">Desbloquea Pro una vez y quédatelo. Las nuevas funciones siguen incluidas.</span>
-                    <span class="pt">Libere o Pro uma vez e fique com ele. Os novos recursos continuam incluídos.</span>
+                    <span class="en">Unlock Pro once and keep it.<br>New features stay included.</span>
+                    <span class="fr">Débloque Pro une fois, garde-le.<br>Les nouvelles fonctions restent incluses.</span>
+                    <span class="es">Desbloquea Pro una vez y quédatelo.<br>Las nuevas funciones siguen incluidas.</span>
+                    <span class="pt">Libere o Pro uma vez e fique com ele.<br>Os novos recursos continuam incluídos.</span>
                 </p>
             </div>
 
@@ -1356,43 +1720,88 @@
     <div class="container">
         <div class="section-head">
             <span class="eyebrow">
-                <span class="en">Data</span>
-                <span class="fr">Données</span>
-                <span class="es">Datos</span>
-                <span class="pt">Dados</span>
+                <span class="en">Privacy</span>
+                <span class="fr">Confidentialité</span>
+                <span class="es">Privacidad</span>
+                <span class="pt">Privacidade</span>
             </span>
             <h2 class="section-title">
-                <span class="en">Your phone is the system of record.</span>
-                <span class="fr">Ton téléphone est la source de vérité.</span>
-                <span class="es">Tu teléfono es la fuente principal.</span>
-                <span class="pt">Seu celular é a fonte principal.</span>
+                <span class="en">Your data belongs to you.<br>Full stop.</span>
+                <span class="fr">Tes données t&rsquo;appartiennent.<br>Point final.</span>
+                <span class="es">Tus datos son tuyos.<br>Sin más.</span>
+                <span class="pt">Seus dados são seus.<br>Ponto final.</span>
             </h2>
         </div>
 
-        <details class="privacy-block privacy-details">
-            <summary>
-                <span>
-                    <span class="en">How we handle your data</span>
-                    <span class="fr">Comment on traite tes données</span>
-                    <span class="es">Cómo manejamos tus datos</span>
-                    <span class="pt">Como tratamos seus dados</span>
+        <div class="privacy-block">
+            <div class="privacy-block-header">
+                <span class="privacy-shield" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </span>
-            </summary>
-            <div class="privacy-body">
-                <p class="en-block">
-                    Your scripts, photos, videos, notes, inspections and lease documents live in app-private storage on your device, encrypted where it counts (Vault uses AES-256-GCM via Android Keystore; MoveProof can anchor a one-way hash of a finished report to OpenTimestamps). Full details in the <a href="/privacy/">privacy policy</a>.
-                </p>
-                <p class="fr-block">
-                    Tes scripts, photos, vidéos, notes, inspections et baux vivent dans le stockage privé de l&rsquo;appli sur ton appareil, chiffrés là où il le faut (Vault utilise AES-256-GCM via Android Keystore&nbsp;; MoveProof peut ancrer une empreinte à sens unique d&rsquo;un rapport sur OpenTimestamps). Détails dans la <a href="/privacy/">politique de confidentialité</a>.
-                </p>
-                <p class="es-block">
-                    Tus guiones, fotos, vídeos, notas, inspecciones y contratos viven en el almacenamiento privado de la app en tu dispositivo, cifrados donde importa (Vault usa AES-256-GCM vía Android Keystore; MoveProof puede anclar un hash unidireccional de un informe en OpenTimestamps). Detalles en la <a href="/privacy/">política de privacidad</a>.
-                </p>
-                <p class="pt-block">
-                    Seus roteiros, fotos, vídeos, notas, vistorias e contratos vivem no armazenamento privado do app no seu aparelho, criptografados onde importa (o Vault usa AES-256-GCM via Android Keystore; o MoveProof pode ancorar um hash unidirecional de um relatório no OpenTimestamps). Detalhes na <a href="/privacy/">política de privacidade</a>.
-                </p>
+                <h3 class="privacy-heading">
+                    <span class="en">What we do and don&rsquo;t do</span>
+                    <span class="fr">Ce qu&rsquo;on fait et ce qu&rsquo;on ne fait pas</span>
+                    <span class="es">Lo que hacemos y no hacemos</span>
+                    <span class="pt">O que fazemos e o que não fazemos</span>
+                </h3>
             </div>
-        </details>
+            <div class="privacy-facts">
+                <div class="privacy-fact">
+                    <span class="privacy-fact-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+                    </span>
+                    <div>
+                        <strong class="en">Nothing leaves your device</strong>
+                        <strong class="fr">Rien ne quitte ton appareil</strong>
+                        <strong class="es">Nada sale de tu dispositivo</strong>
+                        <strong class="pt">Nada sai do seu aparelho</strong>
+                        <p class="en">All your data lives in app-private storage on your phone. No server, no cloud sync, no account required.</p>
+                        <p class="fr">Toutes tes données sont dans le stockage privé de l&rsquo;appli. Pas de serveur, pas de sync cloud, pas de compte.</p>
+                        <p class="es">Todos tus datos viven en el almacenamiento privado del app. Sin servidor, sin sincronización, sin cuenta.</p>
+                        <p class="pt">Todos os seus dados ficam no armazenamento privado do app. Sem servidor, sem sincronização, sem conta.</p>
+                    </div>
+                </div>
+                <div class="privacy-fact">
+                    <span class="privacy-fact-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                    </span>
+                    <div>
+                        <strong class="en">Only the permissions you&rsquo;d expect</strong>
+                        <strong class="fr">Seulement les permissions attendues</strong>
+                        <strong class="es">Solo los permisos que esperarías</strong>
+                        <strong class="pt">Só as permissões que você esperaria</strong>
+                        <p class="en">Camera, microphone, location: each requested only when the feature needs it, never in the background.</p>
+                        <p class="fr">Caméra, micro, localisation demandés uniquement quand la fonction en a besoin, jamais en arrière-plan.</p>
+                        <p class="es">Cámara, micrófono, ubicación: solicitados solo cuando la función los necesita, nunca en segundo plano.</p>
+                        <p class="pt">Câmera, microfone, localização: solicitados apenas quando a função precisa, nunca em segundo plano.</p>
+                    </div>
+                </div>
+                <div class="privacy-fact">
+                    <span class="privacy-fact-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </span>
+                    <div>
+                        <strong class="en">No ads. No tracking. Ever.</strong>
+                        <strong class="fr">Pas de pub. Pas de pistage. Jamais.</strong>
+                        <strong class="es">Sin anuncios. Sin rastreo. Nunca.</strong>
+                        <strong class="pt">Sem anúncios. Sem rastreio. Nunca.</strong>
+                        <p class="en">We don&rsquo;t show ads, sell data or build profiles on you.</p>
+                        <p class="fr">On n&rsquo;affiche pas de pub, on ne vend pas tes données et on ne te profile pas.</p>
+                        <p class="es">No mostramos anuncios, no vendemos datos ni creamos perfiles.</p>
+                        <p class="pt">Não exibimos anúncios, não vendemos dados nem criamos perfis.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="privacy-policy-row">
+                <a href="/privacy/" class="privacy-policy-link">
+                    <span class="en">Read the full privacy policy</span>
+                    <span class="fr">Lire la politique de confidentialité</span>
+                    <span class="es">Leer la política de privacidad</span>
+                    <span class="pt">Ler a política de privacidade</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1420,12 +1829,12 @@
                 <span class="es">Leemos cada mensaje.</span>
                 <span class="pt">Lemos cada mensagem.</span>
             </p>
-            <a href="mailto:allo@clair.tools" class="contact-email-link">
+            <a href="/cdn-cgi/l/email-protection#7a1b1616153a19161b1308540e15151609" class="contact-email-link">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="5" width="18" height="14" rx="2"/>
                     <polyline points="3 7 12 13 21 7"/>
                 </svg>
-                <span>allo@clair.tools</span>
+                <span><span class="__cf_email__" data-cfemail="fe9f929291be9d929f978cd08a9191928d">[email&#160;protected]</span></span>
             </a>
         </div>
     </div>
@@ -1450,7 +1859,7 @@
                     <span class="es">Privacidad</span>
                     <span class="pt">Privacidade</span>
                 </a>
-                <a href="mailto:allo@clair.tools">allo@clair.tools</a>
+                <a href="/cdn-cgi/l/email-protection#a0c1cccccfe0c3ccc1c9d28ed4cfcfccd3"><span class="__cf_email__" data-cfemail="147578787b547778757d663a607b7b7867">[email&#160;protected]</span></a>
             </span>
         </div>
     </div>
@@ -1466,7 +1875,7 @@
 <!-- ───────────────────────────────────────────────────────────────────
      SCRIPTS
      ─────────────────────────────────────────────────────────────────── -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function() {
     'use strict';
 
@@ -1613,6 +2022,76 @@
         syncControls();
         window.addEventListener('resize', syncControls);
     });
+
+    /* —— Catalogue → detail (split-pane, no scroll ping-pong) ─────── */
+    (function() {
+        var tiles = Array.prototype.slice.call(document.querySelectorAll('.cat-tile'));
+        var panels = {};
+        document.querySelectorAll('[data-detail]').forEach(function(p) {
+            panels[p.getAttribute('data-detail')] = p;
+        });
+
+        function isMobile() { return window.innerWidth <= 800; }
+
+        function closeAll() {
+            tiles.forEach(function(t) { t.setAttribute('aria-expanded', 'false'); });
+            Object.keys(panels).forEach(function(k) { panels[k].hidden = true; });
+        }
+
+        function openDetail(app) {
+            var wasOpen = Object.keys(panels).some(function(k) { return !panels[k].hidden; });
+            closeAll();
+            var tile = tiles.find(function(t) { return t.getAttribute('data-app') === app; });
+            var panel = panels[app];
+            if (!tile || !panel) return;
+            tile.setAttribute('aria-expanded', 'true');
+            panel.hidden = false;
+            window.dispatchEvent(new Event('resize'));
+            // On mobile: scroll the detail into view below the tab strip
+            // On desktop: catalogue is a sticky sidebar — no scroll needed
+            if (isMobile()) {
+                var stack = document.getElementById('apps-stack');
+                if (stack) {
+                    var y = stack.getBoundingClientRect().top + window.pageYOffset - 160;
+                    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+                }
+            }
+        }
+
+        tiles.forEach(function(tile) {
+            tile.addEventListener('click', function() {
+                var app = tile.getAttribute('data-app');
+                if (tile.getAttribute('aria-expanded') === 'true') {
+                    closeAll();
+                } else {
+                    openDetail(app);
+                }
+            });
+        });
+
+
+
+        var emptyEl = document.getElementById('apps-empty');
+
+        function updateEmpty() {
+            var anyOpen = Object.keys(panels).some(function(k) { return !panels[k].hidden; });
+            if (emptyEl) emptyEl.hidden = anyOpen;
+        }
+
+        var _closeAll = closeAll;
+        closeAll = function() { _closeAll(); updateEmpty(); };
+
+        var _openDetail = openDetail;
+        openDetail = function(app) { _openDetail(app); updateEmpty(); };
+
+        function fromHash() {
+            var h = (location.hash || '').replace('#', '').toLowerCase();
+            if (h && panels[h]) openDetail(h);
+            else openDetail('vault'); // default: open Vault
+        }
+        window.addEventListener('hashchange', fromHash);
+        fromHash();
+    })();
 
     /* —— Lightbox ──────────────────────────────────────────────────── */
     var lightbox = document.getElementById('lightbox');
