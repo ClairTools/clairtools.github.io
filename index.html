@@ -1829,12 +1829,12 @@ Tout reste sur ton téléphone.</span>
                 <span class="es">Leemos cada mensaje.</span>
                 <span class="pt">Lemos cada mensagem.</span>
             </p>
-            <a href="/cdn-cgi/l/email-protection#7a1b1616153a19161b1308540e15151609" class="contact-email-link">
+            <a href="/cdn-cgi/l/email-protection#fc9d909093bc9f909d958ed2889393908f" class="contact-email-link">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="5" width="18" height="14" rx="2"/>
                     <polyline points="3 7 12 13 21 7"/>
                 </svg>
-                <span><span class="__cf_email__" data-cfemail="fe9f929291be9d929f978cd08a9191928d">[email&#160;protected]</span></span>
+                <span><span class="__cf_email__" data-cfemail="345558585b745758555d461a405b5b5847">[email&#160;protected]</span></span>
             </a>
         </div>
     </div>
@@ -1859,7 +1859,7 @@ Tout reste sur ton téléphone.</span>
                     <span class="es">Privacidad</span>
                     <span class="pt">Privacidade</span>
                 </a>
-                <a href="/cdn-cgi/l/email-protection#a0c1cccccfe0c3ccc1c9d28ed4cfcfccd3"><span class="__cf_email__" data-cfemail="147578787b547778757d663a607b7b7867">[email&#160;protected]</span></a>
+                <a href="/cdn-cgi/l/email-protection#7a1b1616153a19161b1308540e15151609"><span class="__cf_email__" data-cfemail="56373a3a3916353a373f24782239393a25">[email&#160;protected]</span></a>
             </span>
         </div>
     </div>
@@ -2038,7 +2038,7 @@ Tout reste sur ton téléphone.</span>
             Object.keys(panels).forEach(function(k) { panels[k].hidden = true; });
         }
 
-        function openDetail(app) {
+        function openDetail(app, scrollOnMobile) {
             var wasOpen = Object.keys(panels).some(function(k) { return !panels[k].hidden; });
             closeAll();
             var tile = tiles.find(function(t) { return t.getAttribute('data-app') === app; });
@@ -2047,9 +2047,9 @@ Tout reste sur ton téléphone.</span>
             tile.setAttribute('aria-expanded', 'true');
             panel.hidden = false;
             window.dispatchEvent(new Event('resize'));
-            // On mobile: scroll the detail into view below the tab strip
+            // On mobile: only scroll when user explicitly taps a tile (not on initial load)
             // On desktop: catalogue is a sticky sidebar — no scroll needed
-            if (isMobile()) {
+            if (isMobile() && scrollOnMobile === true) {
                 var stack = document.getElementById('apps-stack');
                 if (stack) {
                     var y = stack.getBoundingClientRect().top + window.pageYOffset - 160;
@@ -2064,7 +2064,7 @@ Tout reste sur ton téléphone.</span>
                 if (tile.getAttribute('aria-expanded') === 'true') {
                     closeAll();
                 } else {
-                    openDetail(app);
+                    openDetail(app, true); // user tap — scroll on mobile
                 }
             });
         });
@@ -2086,8 +2086,8 @@ Tout reste sur ton téléphone.</span>
 
         function fromHash() {
             var h = (location.hash || '').replace('#', '').toLowerCase();
-            if (h && panels[h]) openDetail(h);
-            else openDetail('vault'); // default: open Vault
+            if (h && panels[h]) openDetail(h, true); // explicit hash — scroll ok
+            else openDetail('vault', false);          // default load — stay at top
         }
         window.addEventListener('hashchange', fromHash);
         fromHash();
