@@ -236,8 +236,30 @@
         }
         .lang-menu button:hover { background: var(--surface-muted); }
 
+        /* —— Mobile burger menu ───────────────────────────────────────── */
+        .nav-burger { position: relative; display: none; }
+        .nav-burger .nav-btn svg { width: 18px; height: 18px; }
+        .nav-menu {
+            display: none; position: absolute; top: calc(100% + 8px); left: 0;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 6px; min-width: 180px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            z-index: 200;
+        }
+        .nav-menu.open { display: block; }
+        .nav-menu a {
+            display: block;
+            padding: 9px 12px;
+            border-radius: var(--r-sm);
+            font-size: 0.92rem; font-weight: 500;
+            color: var(--text);
+        }
+        .nav-menu a:hover { background: var(--surface-muted); text-decoration: none; }
+
         @media (max-width: 768px) {
             .nav-text-link, .nav-divider { display: none; }
+            .nav-burger { display: block; }
         }
 
         /* —— Hero ─────────────────────────────────────────────────────── */
@@ -912,6 +934,7 @@
             .apps { padding: 24px 0 72px; }
             .hero { padding: 80px 0 56px; }
             .container { padding: 0 20px; }
+            .nav-inner { padding-left: 20px; padding-right: 20px; }
             .section-head { margin-bottom: 40px; }
             .section-title { text-wrap: balance; }
             .section-lede { margin-bottom: 0; text-wrap: pretty; }
@@ -920,6 +943,7 @@
         }
         @media (max-width: 420px) {
             .container { padding: 0 16px; }
+            .nav-inner { padding-left: 16px; padding-right: 16px; }
             .hero h1 { letter-spacing: -0.035em; }
             .hero-lede { font-size: 1rem; }
             .hero-actions { flex-direction: column; align-items: stretch; }
@@ -949,6 +973,37 @@
             <span>ClairTools</span>
         </a>
         <div class="nav-links">
+            <div class="nav-burger" id="nav-burger">
+                <button class="nav-btn" id="nav-menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu" title="Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="#apps">
+                        <span class="en">Apps</span>
+                        <span class="fr">Apps</span>
+                        <span class="es">Apps</span>
+                        <span class="pt">Apps</span>
+                    </a>
+                    <a href="#trust">
+                        <span class="en">Principles</span>
+                        <span class="fr">Principes</span>
+                        <span class="es">Principios</span>
+                        <span class="pt">Princípios</span>
+                    </a>
+                    <a href="#data">
+                        <span class="en">Privacy</span>
+                        <span class="fr">Confidentialité</span>
+                        <span class="es">Privacidad</span>
+                        <span class="pt">Privacidade</span>
+                    </a>
+                    <a href="#contact">
+                        <span class="en">Contact</span>
+                        <span class="fr">Contact</span>
+                        <span class="es">Contacto</span>
+                        <span class="pt">Contato</span>
+                    </a>
+                </div>
+            </div>
             <a href="#apps" class="nav-text-link">
                 <span class="en">Apps</span>
                 <span class="fr">Apps</span>
@@ -1016,11 +1071,11 @@
             <span class="es">Herramientas simples,<br><span class="accent">hechas con honestidad.</span></span>
             <span class="pt">Ferramentas simples,<br><span class="accent">feitas com honestidade.</span></span>
         </h1>
-        <p class="hero-lede" style="width: 660px;">
+        <p class="hero-lede">
             <span class="en">Ad-free,
 Privacy-first apps that respect the people using them. 
 Everything stays on your phone.</span>
-            <span class="fr" style="text-align: justify">Des applis sans pub, respectueuses de la vie privée. 
+            <span class="fr">Des applis sans pub, respectueuses de la vie privée. 
 Tout reste sur ton téléphone.</span>
             <span class="es">Apps sin anuncios, centradas en la privacidad.<br>Todo se queda en tu teléfono.</span>
             <span class="pt">Apps sem anúncios e focados em privacidade.<br>Tudo fica no seu celular.</span>
@@ -1923,6 +1978,31 @@ Tout reste sur ton téléphone.</span>
     document.addEventListener('click', function() { langMenu.classList.remove('open'); });
 
     setLang(detectLang());
+
+    /* —— Mobile burger menu ────────────────────────────────────────── */
+    var navMenu = document.getElementById('nav-menu');
+    var navMenuBtn = document.getElementById('nav-menu-btn');
+
+    function closeNavMenu() {
+        navMenu.classList.remove('open');
+        navMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    navMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var open = navMenu.classList.toggle('open');
+        navMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        langMenu.classList.remove('open');
+    });
+
+    navMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', closeNavMenu);
+    });
+
+    document.addEventListener('click', closeNavMenu);
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeNavMenu();
+    });
 
     /* —— Theme ─────────────────────────────────────────────────────── */
     var themeBtn = document.getElementById('theme-btn');
