@@ -78,6 +78,19 @@
         if (!track) return;
         var slides = track.querySelectorAll('.phone-frame');
         if (!slides.length) return;
+
+        // Controls are identical for every carousel — build them once here
+        // instead of repeating the markup in the HTML.
+        if (!root.querySelector('.carousel-controls')) {
+            var controls = document.createElement('div');
+            controls.className = 'carousel-controls';
+            controls.innerHTML =
+                '<button class="carousel-btn" data-carousel-prev aria-label="Previous screenshots">‹</button>' +
+                '<div class="carousel-progress" aria-label="Scroll screenshots"><div class="carousel-progress-fill"></div></div>' +
+                '<button class="carousel-btn" data-carousel-next aria-label="Next screenshots">›</button>';
+            track.insertAdjacentElement('afterend', controls);
+        }
+
         var prevBtn = root.querySelector('[data-carousel-prev]');
         var nextBtn = root.querySelector('[data-carousel-next]');
         var fill = root.querySelector('.carousel-progress-fill');
@@ -242,10 +255,21 @@
             });
         });
 
+        var lastActive = null;
         function setActive(app) {
+            var activePill = null;
             pills.forEach(function(p) {
-                p.classList.toggle('active', p.getAttribute('data-app') === app);
+                var on = p.getAttribute('data-app') === app;
+                p.classList.toggle('active', on);
+                if (on) activePill = p;
             });
+            // Keep the active pill visible in the horizontal strip (mobile overflow).
+            if (activePill && app !== lastActive) {
+                var dock = activePill.parentNode;
+                var target = activePill.offsetLeft - (dock.clientWidth - activePill.offsetWidth) / 2;
+                dock.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+            }
+            lastActive = app;
         }
 
         // Scrollspy: pick the chapter whose top is closest above the dock line
