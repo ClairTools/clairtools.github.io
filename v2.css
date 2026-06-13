@@ -535,7 +535,9 @@ nav.site-nav {
     width: 20%;
     border-radius: 2px;
     background: var(--accent);
-    transition: width 0.2s ease, transform 0.2s ease, height 0.15s ease, top 0.15s ease;
+    /* No width/transform transition — the fill must track scrollLeft 1:1 or
+       it visibly lags behind the swipe. Only the hover-thickness animates. */
+    transition: height 0.15s ease, top 0.15s ease;
     transform-origin: left;
 }
 @media (hover: hover) {

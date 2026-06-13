@@ -137,79 +137,41 @@
             requestAnimationFrame(function() { rafPending = false; sync(); });
         });
 
-        /* Draggable scrubber - works with mouse (PC) and finger (mobile) */
+        /* Draggable scrubber - works with mouse (PC) and finger (mobile).
+           Sets scrollLeft directly (1:1 with the pointer) — no animation loop
+           to fight a native swipe. Snap is off while dragging, restored on
+           release so the strip magnet-snaps to a frame. */
         var progress = root.querySelector('.carousel-progress');
         if (progress) {
             var dragging = false;
-            var targetScroll = 0;
-            var smoothing = false;
 
-            function pointerTarget(clientX) {
+            function scrollToPointer(clientX) {
                 var rect = progress.getBoundingClientRect();
-                if (rect.width <= 0) return null;
                 var max = maxScroll();
-                if (max <= 0) return null;
+                if (rect.width <= 0 || max <= 0) return;
                 var visible = track.clientWidth / track.scrollWidth;
                 var thumbW = rect.width * visible;
-                // Map pointer so the thumb centre follows the finger/cursor
                 var usable = rect.width - thumbW;
-                var ratio = usable > 0
-                    ? (clientX - rect.left - thumbW / 2) / usable
-                    : 0;
-                ratio = Math.max(0, Math.min(1, ratio));
-                return ratio * max;
-            }
-
-            // Eased follow loop: the strip glides toward the finger/cursor
-            // instead of snapping pixel-to-pixel on every pointermove.
-            function smoothLoop() {
-                var diff = targetScroll - track.scrollLeft;
-                if (Math.abs(diff) < 0.5) {
-                    track.scrollLeft = targetScroll;
-                    if (!dragging) { smoothing = false; return; }
-                } else {
-                    track.scrollLeft += diff * 0.22;
-                }
-                requestAnimationFrame(smoothLoop);
-            }
-            function startSmoothing() {
-                if (smoothing) return;
-                smoothing = true;
-                requestAnimationFrame(smoothLoop);
+                var ratio = usable > 0 ? (clientX - rect.left - thumbW / 2) / usable : 0;
+                track.scrollLeft = Math.max(0, Math.min(1, ratio)) * max;
             }
 
             progress.addEventListener('pointerdown', function(e) {
                 dragging = true;
                 progress.classList.add('dragging');
                 progress.setPointerCapture(e.pointerId);
-                var prevBehavior = track.style.scrollBehavior;
-                track.style.scrollBehavior = 'auto';
                 track.style.scrollSnapType = 'none';
-                progress._prevBehavior = prevBehavior;
-                var t = pointerTarget(e.clientX);
-                if (t !== null) { targetScroll = t; startSmoothing(); }
+                scrollToPointer(e.clientX);
                 e.preventDefault();
             });
             progress.addEventListener('pointermove', function(e) {
-                if (!dragging) return;
-                var t = pointerTarget(e.clientX);
-                if (t !== null) { targetScroll = t; startSmoothing(); }
+                if (dragging) scrollToPointer(e.clientX);
             });
-            function endDrag(e) {
+            function endDrag() {
                 if (!dragging) return;
                 dragging = false;
                 progress.classList.remove('dragging');
-                if (e.pointerId !== undefined && progress.hasPointerCapture(e.pointerId)) {
-                    progress.releasePointerCapture(e.pointerId);
-                }
-                // let the smoothing loop finish gliding to the last target,
-                // then restore the track's normal scroll behaviour
-                var restore = function() {
-                    if (smoothing) { requestAnimationFrame(restore); return; }
-                    track.style.scrollBehavior = progress._prevBehavior || '';
-                    track.style.scrollSnapType = '';
-                };
-                restore();
+                track.style.scrollSnapType = '';
             }
             progress.addEventListener('pointerup', endDrag);
             progress.addEventListener('pointercancel', endDrag);
