@@ -228,78 +228,111 @@
         window.addEventListener('load', sync);
     });
 
-    /* -- App dock: jump + scrollspy ------------------------------ */
+    /* -- App catalogue: grid <-> detail -------------------------- */
     (function() {
-        var pills = Array.prototype.slice.call(document.querySelectorAll('.dock-pill'));
+        var grid = document.getElementById('app-grid');
+        var detail = document.getElementById('app-detail');
         var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter[data-app]'));
-        if (!pills.length || !chapters.length) return;
+        if (!grid || !detail || !chapters.length) return;
 
-        var dockWrap = document.querySelector('.app-dock-wrap');
+        var STATUS = {
+            live: '<span class="en">Available</span><span class="fr">Disponible</span><span class="es">Disponible</span><span class="pt">Disponível</span>',
+            soon: '<span class="en">Coming soon</span><span class="fr">Bientôt</span><span class="es">Próximamente</span><span class="pt">Em breve</span>'
+        };
+        var BACK = '<span class="en">All apps</span><span class="fr">Toutes les apps</span><span class="es">Todas las apps</span><span class="pt">Todos os apps</span>';
 
-        function offsetY() {
-            var navH = document.querySelector('nav.site-nav').offsetHeight;
-            var dockH = dockWrap ? dockWrap.offsetHeight : 0;
-            return navH + dockH + 4;
-        }
-
-        function jumpTo(app) {
-            var target = chapters.find(function(c) { return c.getAttribute('data-app') === app; });
-            if (!target) return;
-            var y = target.getBoundingClientRect().top + window.pageYOffset - offsetY() + 1;
-            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-        }
-
-        pills.forEach(function(pill) {
-            pill.addEventListener('click', function() {
-                jumpTo(pill.getAttribute('data-app'));
-            });
+        // Build one tile per chapter — no duplicated metadata, scales to any
+        // number of apps (the grid auto-fills columns).
+        chapters.forEach(function(ch) {
+            var app = ch.getAttribute('data-app');
+            var name = ch.querySelector('.chapter-name').textContent.trim();
+            var cat = ch.querySelector('.chapter-eyebrow').innerHTML;
+            var soon = !!ch.querySelector('.chapter-cta .btn-disabled');
+            var tile = document.createElement('button');
+            tile.type = 'button';
+            tile.className = 'app-tile';
+            tile.setAttribute('role', 'listitem');
+            tile.setAttribute('data-app', app);
+            tile.innerHTML =
+                '<span class="app-tile-cat">' + cat + '</span>' +
+                '<span class="app-tile-name">' + name + '</span>' +
+                '<span class="app-tile-status ' + (soon ? 'is-soon' : 'is-live') + '">' +
+                    '<span class="app-tile-dot" aria-hidden="true"></span>' +
+                    (soon ? STATUS.soon : STATUS.live) +
+                '</span>';
+            tile.addEventListener('click', function() { openApp(app, true); });
+            grid.appendChild(tile);
         });
 
-        var lastActive = null;
-        function setActive(app) {
-            var activePill = null;
-            pills.forEach(function(p) {
-                var on = p.getAttribute('data-app') === app;
-                p.classList.toggle('active', on);
-                if (on) activePill = p;
+        // Sticky "back to grid" bar injected once at the top of the detail view.
+        var bar = document.createElement('div');
+        bar.className = 'back-bar';
+        bar.innerHTML =
+            '<div class="container">' +
+                '<button type="button" class="back-to-grid">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                    '<rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect>' +
+                    '<rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>' +
+                    '<span>' + BACK + '</span>' +
+                '</button>' +
+            '</div>';
+        bar.querySelector('.back-to-grid').addEventListener('click', function() { showGrid(true); });
+        detail.insertBefore(bar, detail.firstChild);
+
+        function navH() {
+            var n = document.querySelector('nav.site-nav');
+            return n ? n.offsetHeight : 0;
+        }
+        function scrollToAppsTop(smooth) {
+            var apps = document.getElementById('apps');
+            var y = apps.getBoundingClientRect().top + window.pageYOffset - navH() - 8;
+            window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' });
+        }
+
+        // scroll: false = set state silently (initial load — keep the visitor
+        // wherever they are). true = user action, glide to the apps section.
+        function openApp(app, scroll) {
+            var found = false;
+            chapters.forEach(function(ch) {
+                var on = ch.getAttribute('data-app') === app;
+                ch.hidden = !on;
+                if (on) found = true;
             });
-            // Keep the active pill visible in the horizontal strip (mobile overflow).
-            if (activePill && app !== lastActive) {
-                var dock = activePill.parentNode;
-                var target = activePill.offsetLeft - (dock.clientWidth - activePill.offsetWidth) / 2;
-                dock.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+            if (!found) return;
+            grid.parentNode.hidden = true;
+            detail.hidden = false;
+            if (location.hash.replace('#', '') !== app) {
+                history.replaceState(null, '', '#' + app);
             }
-            lastActive = app;
+            // The carousel for this chapter initialised while hidden (zero width);
+            // nudge it to recompute progress + button states now that it's visible.
+            window.dispatchEvent(new Event('resize'));
+            if (scroll) scrollToAppsTop(true);
         }
 
-        // Scrollspy: pick the chapter whose top is closest above the dock line
-        var spyPending = false;
-        function spy() {
-            var line = offsetY() + 60;
-            var current = null;
-            for (var i = 0; i < chapters.length; i++) {
-                var r = chapters[i].getBoundingClientRect();
-                if (r.top <= line && r.bottom > line) { current = chapters[i]; break; }
-            }
-            if (current) setActive(current.getAttribute('data-app'));
-            else setActive(null);
+        function showGrid(scroll) {
+            detail.hidden = true;
+            grid.parentNode.hidden = false;
+            chapters.forEach(function(ch) { ch.hidden = true; });
+            if (location.hash) history.replaceState(null, '', location.pathname);
+            if (scroll) scrollToAppsTop(true);
         }
-        window.addEventListener('scroll', function() {
-            if (spyPending) return;
-            spyPending = true;
-            requestAnimationFrame(function() { spyPending = false; spy(); });
-        }, { passive: true });
-        spy();
 
-        // Deep links: #vault, #moveproof, ...
-        function fromHash() {
+        function syncFromHash(scroll) {
             var h = (location.hash || '').replace('#', '').toLowerCase();
             if (h && chapters.some(function(c) { return c.getAttribute('data-app') === h; })) {
-                setTimeout(function() { jumpTo(h); }, 50);
+                openApp(h, scroll);
+            } else {
+                showGrid(scroll);
             }
         }
-        window.addEventListener('hashchange', fromHash);
-        fromHash();
+
+        // #apps from the nav should always land on the grid, not a stale detail.
+        document.querySelectorAll('a[href="#apps"]').forEach(function(a) {
+            a.addEventListener('click', function() { showGrid(false); });
+        });
+        window.addEventListener('hashchange', function() { syncFromHash(true); });
+        syncFromHash(false);
     })();
 
     /* -- Lightbox ------------------------------------------------ */

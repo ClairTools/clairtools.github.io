@@ -143,26 +143,13 @@
         </p>
     </div>
 
-    <!-- Sticky app dock -->
-    <div class="app-dock-wrap">
-        <div class="app-dock" role="tablist" aria-label="App catalogue">
-            <button type="button" class="dock-pill" data-app="vault">
-                <span class="dock-dot dock-dot--live" aria-hidden="true"></span>Vault
-            </button>
-            <button type="button" class="dock-pill" data-app="moveproof">
-                <span class="dock-dot dock-dot--live" aria-hidden="true"></span>MoveProof
-            </button>
-            <button type="button" class="dock-pill" data-app="caelo">
-                <span class="dock-dot dock-dot--soon" aria-hidden="true"></span>Caelo
-            </button>
-            <button type="button" class="dock-pill" data-app="prompter">
-                <span class="dock-dot dock-dot--soon" aria-hidden="true"></span>Prompter
-            </button>
-            <button type="button" class="dock-pill" data-app="gasosave">
-                <span class="dock-dot dock-dot--soon" aria-hidden="true"></span>GasoSave
-            </button>
-        </div>
+    <!-- App catalogue grid (tiles auto-generated from the chapters below by v2.js) -->
+    <div class="container">
+        <div class="app-grid" id="app-grid" role="list" aria-label="App catalogue"></div>
     </div>
+
+    <!-- App detail view — one chapter shown at a time, populated by v2.js -->
+    <div class="app-detail" id="app-detail" hidden>
 
     <!-- ── 01 · Vault ─────────────────────────────────────────── -->
     <article class="chapter" data-app="vault" id="vault">
@@ -324,10 +311,10 @@
             </div>
             <h3 class="chapter-name">Caelo</h3>
             <p class="chapter-tagline">
-                <span class="en">Accurate forecasts and radar &mdash; with no accounts, no ads and nothing tracking you.</span>
-                <span class="fr">Prévisions précises et radar &mdash; sans compte, sans pub et sans pistage.</span>
-                <span class="es">Pronósticos precisos y radar &mdash; sin cuentas, sin anuncios y sin rastreo.</span>
-                <span class="pt">Previsões precisas e radar &mdash; sem contas, sem anúncios e sem rastreio.</span>
+                <span class="en">Accurate hourly forecasts and animated rain radar, at a glance.</span>
+                <span class="fr">Prévisions horaires précises et radar de pluie animé, en un coup d&rsquo;œil.</span>
+                <span class="es">Pronósticos por hora precisos y radar de lluvia animado, de un vistazo.</span>
+                <span class="pt">Previsões horárias precisas e radar de chuva animado, num relance.</span>
             </p>
             <div class="chapter-grid">
                 <div class="chapter-info">
@@ -491,6 +478,7 @@
             </div>
         </div>
     </article>
+    </div><!-- /#app-detail -->
 </section>
 
 <!-- ═══════════════════ TRUST ═══════════════════ -->
@@ -615,10 +603,10 @@
                 <strong class="fr">Rien ne quitte ton appareil</strong>
                 <strong class="es">Nada sale de tu dispositivo</strong>
                 <strong class="pt">Nada sai do seu aparelho</strong>
-                <p class="en">All your data lives in app-private storage on your phone. No server, no cloud sync, no account required.</p>
-                <p class="fr">Toutes tes données sont dans le stockage privé de l&rsquo;appli. Pas de serveur, pas de sync cloud, pas de compte.</p>
-                <p class="es">Todos tus datos viven en el almacenamiento privado del app. Sin servidor, sin sincronización, sin cuenta.</p>
-                <p class="pt">Todos os seus dados ficam no armazenamento privado do app. Sem servidor, sem sincronização, sem conta.</p>
+                <p class="en">All your data lives in app-private storage on your phone &mdash; no server, no cloud sync.</p>
+                <p class="fr">Toutes tes données sont dans le stockage privé de l&rsquo;appli &mdash; pas de serveur, pas de sync cloud.</p>
+                <p class="es">Todos tus datos viven en el almacenamiento privado del app &mdash; sin servidor, sin sincronización.</p>
+                <p class="pt">Todos os seus dados ficam no armazenamento privado do app &mdash; sem servidor, sem sincronização.</p>
             </div>
             <div class="privacy-fact">
                 <span class="privacy-fact-icon" aria-hidden="true">
@@ -637,14 +625,14 @@
                 <span class="privacy-fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </span>
-                <strong class="en">No ads. No tracking. Ever.</strong>
-                <strong class="fr">Pas de pub. Pas de pistage. Jamais.</strong>
-                <strong class="es">Sin anuncios. Sin rastreo. Nunca.</strong>
-                <strong class="pt">Sem anúncios. Sem rastreio. Nunca.</strong>
-                <p class="en">We don&rsquo;t show ads, sell data or build profiles on you.</p>
-                <p class="fr">On n&rsquo;affiche pas de pub, on ne vend pas tes données et on ne te profile pas.</p>
-                <p class="es">No mostramos anuncios, no vendemos datos ni creamos perfiles.</p>
-                <p class="pt">Não exibimos anúncios, não vendemos dados nem criamos perfis.</p>
+                <strong class="en">We don&rsquo;t sell your data</strong>
+                <strong class="fr">On ne vend pas tes données</strong>
+                <strong class="es">No vendemos tus datos</strong>
+                <strong class="pt">Não vendemos seus dados</strong>
+                <p class="en">No data brokers, no profiling, no hidden monetization. You&rsquo;re the user, not the product.</p>
+                <p class="fr">Pas de courtiers de données, pas de profilage, pas de monétisation cachée. Tu es l&rsquo;utilisateur, pas le produit.</p>
+                <p class="es">Sin intermediarios de datos, sin perfiles, sin monetización oculta. Eres el usuario, no el producto.</p>
+                <p class="pt">Sem corretores de dados, sem perfis, sem monetização oculta. Você é o usuário, não o produto.</p>
             </div>
         </div>
 
