@@ -197,6 +197,15 @@
         var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter[data-app]'));
         if (!grid || !detail || !chapters.length) return;
 
+        // Always surface released apps first: a "Coming soon" chapter carries a
+        // .btn-disabled CTA. Stable sort keeps each group in its source order, so
+        // a newly-released app moves up automatically the moment its CTA goes live.
+        var isSoon = function(ch) { return !!ch.querySelector('.chapter-cta .btn-disabled'); };
+        chapters = chapters
+            .map(function(ch, i) { return { ch: ch, i: i, soon: isSoon(ch) }; })
+            .sort(function(a, b) { return (a.soon - b.soon) || (a.i - b.i); })
+            .map(function(e) { return e.ch; });
+
         var STATUS = {
             live: '<span class="en">Available</span><span class="fr">Disponible</span><span class="es">Disponible</span><span class="pt">Disponível</span>',
             soon: '<span class="en">Coming soon</span><span class="fr">Bientôt</span><span class="es">Próximamente</span><span class="pt">Em breve</span>'
@@ -216,6 +225,7 @@
             tile.setAttribute('role', 'listitem');
             tile.setAttribute('data-app', app);
             tile.innerHTML =
+                '<img class="app-tile-icon" src="img/icon-' + app + '.png" alt="" width="56" height="56" loading="lazy">' +
                 '<span class="app-tile-cat">' + cat + '</span>' +
                 '<span class="app-tile-name">' + name + '</span>' +
                 '<span class="app-tile-status ' + (soon ? 'is-soon' : 'is-live') + '">' +
