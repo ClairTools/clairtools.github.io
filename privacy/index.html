@@ -88,7 +88,7 @@
     <h1>Privacy Policy</h1>
     <p class="date">Effective: May 21, 2026</p>
 
-    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, <strong>MoveProof</strong>, <strong>GasoSave</strong>, <strong>Caelo</strong>, <strong>CapTune</strong>, and <strong>PrivaKey</strong>.</p>
+    <p>ClairTools builds privacy-first Android apps. This policy covers all ClairTools apps: <strong>Prompter</strong>, <strong>Vault</strong>, <strong>MoveProof</strong>, <strong>GasoSave</strong>, <strong>Caelo</strong>, <strong>CapTune</strong>, <strong>PrivaKey</strong>, and <strong>ZuluTone</strong>.</p>
 
     <h2>What we don't do</h2>
     <ul>
@@ -111,6 +111,13 @@
     <h3>Vault</h3>
     <ul>
         <li><strong>No analytics. No Firebase. No crash reporting.</strong> Vault is intentionally offline-only. The only network permission is for in-app purchase processing via Google Play.</li>
+    </ul>
+
+    <h3>ZuluTone</h3>
+    <ul>
+        <li><strong>No analytics. No Firebase. No crash reporting.</strong> Timing is local-only: everything stays on your device. The only network permission is for in-app purchase processing via Google Play.</li>
+        <li><strong>Microphone, only if you ask.</strong> The optional sound-activated stopwatch listens in the foreground and analyses frames in memory &mdash; nothing is ever recorded or stored.</li>
+        <li><strong>Bluetooth, opt-in.</strong> The optional remote (a clicker or keyboard you already paired) controls the active timer on screen. ZuluTone never scans or pairs devices.</li>
     </ul>
 
     <h3>All apps (RevenueCat billing)</h3>
@@ -140,6 +147,7 @@
                     <th class="app">Caelo</th>
                     <th class="app">CapTune</th>
                     <th class="app">PrivaKey</th>
+                    <th class="app">ZuluTone</th>
                     <th>Why we ask</th>
                 </tr>
             </thead>
@@ -153,6 +161,7 @@
                     <td class="app">—</td>
                     <td class="app yes">✓</td>
                     <td class="app">—</td>
+                    <td class="app">—</td>
                     <td class="why">Prompter: recording with the teleprompter. Vault: importing photos directly into the encrypted vault. MoveProof: inspection photos. GasoSave: scanning fuel receipts. CapTune: in-app video recording while you tune.</td>
                 </tr>
                 <tr>
@@ -164,7 +173,8 @@
                     <td class="app">—</td>
                     <td class="app yes">✓</td>
                     <td class="app">—</td>
-                    <td class="why">Audio track for video recording (Prompter, MoveProof) and voice notes (Vault, MoveProof). CapTune: the microphone is both the live pitch source and the recording's audio track. GasoSave and Caelo do not record audio.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Audio track for video recording (Prompter, MoveProof) and voice notes (Vault, MoveProof). CapTune: the microphone is both the live pitch source and the recording's audio track. GasoSave and Caelo do not record audio. ZuluTone: the optional sound-activated stopwatch listens in the foreground only &mdash; frames are analysed in memory and nothing is recorded or stored.</td>
                 </tr>
                 <tr>
                     <td class="perm">Location</td>
@@ -173,6 +183,7 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
+                    <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="why">MoveProof: optional GPS coordinates burned into inspection photos as proof of place. GasoSave: GPS distance for trips and station-aware fuel prices. Caelo: a one-shot GPS fix for your local forecast — used once, never stored, never sent to us.</td>
@@ -186,7 +197,8 @@
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
-                    <td class="why">Prompter: remote control for teleprompter scrolling. GasoSave: detecting a paired car connection to auto-start a trip.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Prompter: remote control for teleprompter scrolling. GasoSave: detecting a paired car connection to auto-start a trip. ZuluTone: an optional Bluetooth remote (a clicker or keyboard you already paired) controls the active timer on screen &mdash; opt-in, never scans or pairs.</td>
                 </tr>
                 <tr>
                     <td class="perm">Biometrics</td>
@@ -197,11 +209,13 @@
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
+                    <td class="app">—</td>
                     <td class="why">Vault: optional fingerprint or face unlock instead of typing the PIN.</td>
                 </tr>
                 <tr>
                     <td class="perm">Display over other apps</td>
                     <td class="app yes">✓</td>
+                    <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
@@ -219,7 +233,8 @@
                     <td class="app">—</td>
                     <td class="app">—</td>
                     <td class="app">—</td>
-                    <td class="why">Prompter: keeps the recorder and floating overlay running while you switch apps. GasoSave: keeps the trip recorder running in the background until you stop. CapTune records only while open, so it needs no foreground service.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Prompter: keeps the recorder and floating overlay running while you switch apps. GasoSave: keeps the trip recorder running in the background until you stop. CapTune records only while open, so it needs no foreground service. ZuluTone: keeps the running timer and its ongoing notification active.</td>
                 </tr>
                 <tr>
                     <td class="perm">Internet</td>
@@ -230,7 +245,8 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
-                    <td class="why">Required for in-app purchases via Google Play / RevenueCat, and for optional AI generation (Prompter, MoveProof), fuel-price lookup (GasoSave), and weather forecasts and radar (Caelo). CapTune uses it only for in-app purchases. PrivaKey declares it only in the settings app, for purchases — the keyboard itself has no internet permission, so your typing never leaves the device. Never used to upload your data.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Required for in-app purchases via Google Play / RevenueCat, and for optional AI generation (Prompter, MoveProof), fuel-price lookup (GasoSave), and weather forecasts and radar (Caelo). CapTune uses it only for in-app purchases. PrivaKey declares it only in the settings app, for purchases — the keyboard itself has no internet permission, so your typing never leaves the device. ZuluTone uses it only for in-app purchases; timing is local-only. Never used to upload your data.</td>
                 </tr>
                 <tr>
                     <td class="perm">Notifications</td>
@@ -241,7 +257,8 @@
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
                     <td class="app yes">✓</td>
-                    <td class="why">Android 13+ runtime opt-in. Used only for the notifications the running service must show (recording, overlay, trip in progress, weather alerts) and never for promotions.</td>
+                    <td class="app yes">✓</td>
+                    <td class="why">Android 13+ runtime opt-in. Used only for the notifications the running service must show (recording, overlay, trip in progress, weather alerts, running timer) and never for promotions.</td>
                 </tr>
             </tbody>
         </table>
